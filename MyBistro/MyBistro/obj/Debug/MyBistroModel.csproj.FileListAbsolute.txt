@@ -1,0 +1,6 @@
+C:\Users\elion\source\repos\MyBistro\MyBistro\bin\Debug\MyBistro.dll
+C:\Users\elion\source\repos\MyBistro\MyBistro\bin\Debug\MyBistro.pdb
+C:\Users\elion\source\repos\MyBistro\MyBistro\obj\Debug\MyBistroModel.csprojResolveAssemblyReference.cache
+C:\Users\elion\source\repos\MyBistro\MyBistro\obj\Debug\MyBistroModel.csproj.CoreCompileInputs.cache
+C:\Users\elion\source\repos\MyBistro\MyBistro\obj\Debug\MyBistro.dll
+C:\Users\elion\source\repos\MyBistro\MyBistro\obj\Debug\MyBistro.pdb
