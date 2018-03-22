@@ -19,7 +19,7 @@ namespace MyBistroView
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(container.Resolve<Form1>());
+            Application.Run(container.Resolve<FormMain>());
         }
 
         public static IUnityContainer BuildUnityContainer()
