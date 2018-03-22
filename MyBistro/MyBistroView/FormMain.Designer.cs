@@ -1,6 +1,6 @@
 ﻿namespace MyBistroView
 {
-    partial class Form1
+    partial class FormMain
     {
         /// <summary>
         /// Обязательная переменная конCтруктора.
