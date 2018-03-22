@@ -8,7 +8,7 @@ using Unity.Attributes;
 
 namespace MyBistroView
 {
-    public partial class Form1 : Form
+    public partial class FormMain : Form
     {
 
         [Dependency]
@@ -17,7 +17,7 @@ namespace MyBistroView
         private readonly IMainService service;
 
 
-        public Form1(IMainService service)
+        public FormMain(IMainService service)
         {
             InitializeComponent();
             this.service = service;
