@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D73DD2F3-2121-4154-B4F4-4A46D5A630DE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MyBistroService</RootNamespace>
+    <AssemblyName>MyBistroService</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BindingModels\ConstituentSnackBindingModels.cs" />
+    <Compile Include="BindingModels\RefrigeratorBindingModels.cs" />
+    <Compile Include="BindingModels\RefrigeratorConstituentBindingModels.cs" />
+    <Compile Include="BindingModels\SnackBindingModels.cs" />
+    <Compile Include="BindingModels\VitaAssassinaBindingModels.cs" />
+    <Compile Include="BindingModels\АcquirenteBindingModels.cs" />
+    <Compile Include="BindingModels\СonstituentBindingModels.cs" />
+    <Compile Include="BindingModels\СuocoBindingModels.cs" />
+    <Compile Include="DataList.cs" />
+    <Compile Include="ImplementationsList\MainServiceList.cs" />
+    <Compile Include="ImplementationsList\RefrigeratorServiceList.cs" />
+    <Compile Include="ImplementationsList\SnackServiceList.cs" />
+    <Compile Include="ImplementationsList\АcquirenteServiceList.cs" />
+    <Compile Include="ImplementationsList\СonstituentServiceList.cs" />
+    <Compile Include="ImplementationsList\СuocoServiceList.cs" />
+    <Compile Include="Interfaces\IMainService.cs" />
+    <Compile Include="Interfaces\IRefrigeratorService.cs" />
+    <Compile Include="Interfaces\ISnackService.cs" />
+    <Compile Include="Interfaces\IАcquirenteService.cs" />
+    <Compile Include="Interfaces\IСonstituentService.cs" />
+    <Compile Include="Interfaces\IСuocoService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\ConstituentSnackViewModels.cs" />
+    <Compile Include="ViewModels\RefrigeratorViewModels.cs" />
+    <Compile Include="ViewModels\RefrigeratorConstituentViewModels.cs" />
+    <Compile Include="ViewModels\SnackViewModels.cs" />
+    <Compile Include="ViewModels\VitaAssassinaViewModels.cs" />
+    <Compile Include="ViewModels\АcquirenteViewModels.cs" />
+    <Compile Include="ViewModels\СonstituentViewModels.cs" />
+    <Compile Include="ViewModels\СuocoViewModels.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MyBistro\MyBistroModel.csproj">
+      <Project>{def043dc-135c-4b87-9210-d15db46863a4}</Project>
+      <Name>MyBistroModel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
