@@ -20,16 +20,6 @@ namespace MyBistroService.ImplementationsList
         }
         public List<CuocoViewModels> GetList()
         {
-            /*List<CuocoViewModels> result = new List<CuocoViewModels>();
-            for (int i = 0; i < source.cuoco.Count; ++i)
-            {
-                result.Add(new CuocoViewModels
-                {
-                    Id = source.cuoco[i].Id,
-                    CuocoFIO = source.cuoco[i].CuocoFIO
-                });
-            }
-            return result; */
             List<CuocoViewModels> result = source.cuoco.Select(rec => new CuocoViewModels
             {
                 Id = rec.Id,
@@ -41,18 +31,6 @@ namespace MyBistroService.ImplementationsList
 
         public CuocoViewModels GetElement(int id)
         {
-            /* for (int i = 0; i < source.cuoco.Count; ++i)
-             {
-                 if (source.cuoco[i].Id == id)
-                 {
-                     return new CuocoViewModels
-                     {
-                         Id = source.cuoco[i].Id,
-                         CuocoFIO = source.cuoco[i].CuocoFIO
-                     };
-                 }
-             }
-             throw new Exception("Элемент не найден"); */
             Cuoco element = source.cuoco.FirstOrDefault(rec => rec.Id == id);
             if (element != null)
             {
@@ -67,23 +45,6 @@ namespace MyBistroService.ImplementationsList
 
         public void AddElement(CuocoBindingModels model)
         {
-            /* int maxId = 0;
-             for (int i = 0; i < source.cuoco.Count; ++i)
-             {
-                 if (source.cuoco[i].Id > maxId)
-                 {
-                     maxId = source.cuoco[i].Id;
-                 }
-                 if (source.cuoco[i].CuocoFIO == model.CuocoFIO)
-                 {
-                     throw new Exception("Уже еCть Cотрудник C таким ФИО");
-                 }
-             }
-             source.cuoco.Add(new Cuoco
-             {
-                 Id = maxId + 1,
-                 CuocoFIO = model.CuocoFIO
-             }); */
             Cuoco element = source.cuoco.FirstOrDefault(rec => rec.CuocoFIO == model.CuocoFIO);
             if (element != null)
             {
@@ -99,24 +60,6 @@ namespace MyBistroService.ImplementationsList
 
         public void UpdElement(CuocoBindingModels model)
         {
-            /* int index = -1;
-             for (int i = 0; i < source.cuoco.Count; ++i)
-             {
-                 if (source.cuoco[i].Id == model.Id)
-                 {
-                     index = i;
-                 }
-                 if (source.cuoco[i].CuocoFIO == model.CuocoFIO &&
-                     source.cuoco[i].Id != model.Id)
-                 {
-                     throw new Exception("Уже еCть Cотрудник C таким ФИО");
-                 }
-             }
-             if (index == -1)
-             {
-                 throw new Exception("Элемент не найден");
-             }
-             source.cuoco[index].CuocoFIO = model.CuocoFIO; */
             Cuoco element = source.cuoco.FirstOrDefault(rec =>
                                      rec.CuocoFIO == model.CuocoFIO && rec.Id != model.Id);
             if (element != null)
@@ -133,15 +76,6 @@ namespace MyBistroService.ImplementationsList
 
         public void DelElement(int id)
         {
-            /* for (int i = 0; i < source.cuoco.Count; ++i)
-            {
-                if (source.cuoco[i].Id == id)
-                {
-                    source.cuoco.RemoveAt(i);
-                    return;
-                }
-            } 
-            throw new Exception("Элемент не найден"); */
             Cuoco element = source.cuoco.FirstOrDefault(rec => rec.Id == id);
             if (element != null)
             {
