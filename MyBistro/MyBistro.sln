@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyBistroService", "MyBistro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyBistroView", "MyBistroView\MyBistroView.csproj", "{11A49D6C-FECD-46F7-BC22-B442A225CDE8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyBistroWeb", "MyBistroWeb\MyBistroWeb.csproj", "{123DF661-E1BD-4429-A27A-BB6986965C05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{11A49D6C-FECD-46F7-BC22-B442A225CDE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11A49D6C-FECD-46F7-BC22-B442A225CDE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11A49D6C-FECD-46F7-BC22-B442A225CDE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{123DF661-E1BD-4429-A27A-BB6986965C05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{123DF661-E1BD-4429-A27A-BB6986965C05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{123DF661-E1BD-4429-A27A-BB6986965C05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{123DF661-E1BD-4429-A27A-BB6986965C05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

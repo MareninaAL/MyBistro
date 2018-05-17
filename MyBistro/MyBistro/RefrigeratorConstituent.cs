@@ -15,9 +15,5 @@ namespace MyBistro
         public int ConstituentId { get; set; }
 
         public int Count { get; set; }
-
-        public virtual Refrigerator Refrigerator { get; set; }
-
-        public virtual Constituent Constituent { get; set; }
     }
 }

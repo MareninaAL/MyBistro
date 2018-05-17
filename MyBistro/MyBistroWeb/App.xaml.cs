@@ -1,15 +1,22 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using MyBistroService.ImplementationsList;
+using MyBistroService.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 using Unity;
 using Unity.Lifetime;
-using MyBistroService.ImplementationsList;
-using MyBistroService.Interfaces;
 
-namespace MyBistroView
+namespace BistroWeb
 {
-    static class Program
-    {
-        /// <summary>
+    /// <summary>
+    /// Логика взаимодействия для App.xaml
+    /// </summary>
+    public partial class App : Application
+    { /// <summary>
         /// Главная точка входа для приложения.
         /// </summary>
         [STAThread]
@@ -17,9 +24,8 @@ namespace MyBistroView
         {
             var container = BuildUnityContainer();
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(container.Resolve<FormMain>());
+            var application = new App();
+            application.Run(container.Resolve<MainWindow>());
         }
 
         public static IUnityContainer BuildUnityContainer()
@@ -34,5 +40,6 @@ namespace MyBistroView
 
             return currentContainer;
         }
+
     }
 }
