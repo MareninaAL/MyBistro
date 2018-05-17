@@ -1,0 +1,22 @@
+﻿<Window x:Class="BistroWeb.CreateVitaAssassinaWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BistroWeb"
+        mc:Ignorable="d"
+        Title="CreateVitaAssassinaWindow" Height="300" Width="300">
+    <Grid>
+        <Label x:Name="labelAcquirente" Content="Клиент" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="labelSnack" Content="Изделие" HorizontalAlignment="Left" Margin="20,60,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="comboBoxAcquirente" HorizontalAlignment="Left" Margin="100,20,0,0" VerticalAlignment="Top" Width="150"/>
+        <ComboBox x:Name="comboBoxSnack" HorizontalAlignment="Left" Margin="100,60,0,0" VerticalAlignment="Top" Width="150" SelectionChanged="comboBoxSnack_SelectionChanged"/>
+        <Label x:Name="labelCount" Content="Количество" HorizontalAlignment="Left" Margin="20,100,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="labelSumm" Content="Сумма" HorizontalAlignment="Left" Margin="20,140,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textBoxCount" HorizontalAlignment="Left" Height="25" Margin="100,100,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="150" TextChanged="textBoxCount_TextChanged"/>
+        <TextBox x:Name="textBoxSumm" HorizontalAlignment="Left" Height="25" Margin="100,140,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="150" IsEnabled="False"/>
+        <Button x:Name="buttonSave" Content="Сохранить" HorizontalAlignment="Left" Margin="100,210,0,0" VerticalAlignment="Top" Width="80" Click="buttonSave_Click"/>
+        <Button x:Name="buttonCancel" Content="Отмена" HorizontalAlignment="Left" Margin="190,210,0,0" VerticalAlignment="Top" Width="80" Click="buttonCancel_Click"/>
+
+    </Grid>
+</Window>
