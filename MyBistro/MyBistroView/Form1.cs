@@ -1,4 +1,5 @@
 ﻿using MyBistro.ViewModels;
+using MyBistroService.BindingModels;
 using MyBistroService.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -10,17 +11,17 @@ namespace MyBistroView
 {
     public partial class FormMain : Form
     {
-
         [Dependency]
         public new IUnityContainer Container { get; set; }
 
         private readonly IMainService service;
+        private readonly IReportService reportService;
 
-
-        public FormMain(IMainService service)
+        public FormMain(IMainService service, IReportService reportService)
         {
             InitializeComponent();
             this.service = service;
+            this.reportService = reportService;
         }
 
         private void LoadData()
@@ -135,6 +136,46 @@ namespace MyBistroView
         private void buttonRef_Click(object sender, EventArgs e)
         {
             LoadData();
+        }
+
+        private void отчетыToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void прайсизделийToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Filter = "doc|*.doc|docx|*.docx"
+            };
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    reportService.SaveSnackPrice(new ReportBindingModel
+                    {
+                        FileName = sfd.FileName
+                    });
+                    MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void загруженностьСкладовToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = Container.Resolve<FormRefrigeratorsLoad>();
+            form.ShowDialog();
+        }
+
+        private void заказыКлиентовToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = Container.Resolve<FormAcquirenteVitaAssassinas>();
+            form.ShowDialog();
         }
     }
 }

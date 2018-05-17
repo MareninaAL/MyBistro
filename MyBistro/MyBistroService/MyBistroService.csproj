@@ -30,7 +30,27 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.13.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.13\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <Private>True</Private>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Word, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Office.Interop.Word.15.0.4797.1003\lib\net20\Microsoft.Office.Interop.Word.dll</HintPath>
+      <Private>True</Private>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -43,12 +63,21 @@
     <Compile Include="BindingModels\ConstituentSnackBindingModels.cs" />
     <Compile Include="BindingModels\RefrigeratorBindingModels.cs" />
     <Compile Include="BindingModels\RefrigeratorConstituentBindingModels.cs" />
+    <Compile Include="BindingModels\ReportBindingModel.cs" />
     <Compile Include="BindingModels\SnackBindingModels.cs" />
     <Compile Include="BindingModels\VitaAssassinaBindingModels.cs" />
     <Compile Include="BindingModels\АcquirenteBindingModels.cs" />
     <Compile Include="BindingModels\СonstituentBindingModels.cs" />
     <Compile Include="BindingModels\СuocoBindingModels.cs" />
+    <Compile Include="BistroDbContext.cs" />
     <Compile Include="DataList.cs" />
+    <Compile Include="ImplementationsBD\AcquirenteServiceBD.cs" />
+    <Compile Include="ImplementationsBD\ConstituentServiceBD.cs" />
+    <Compile Include="ImplementationsBD\CuocoServiceBD.cs" />
+    <Compile Include="ImplementationsBD\MainServiceBD.cs" />
+    <Compile Include="ImplementationsBD\RefrigeratorServiceBD.cs" />
+    <Compile Include="ImplementationsBD\ReportServiceBD.cs" />
+    <Compile Include="ImplementationsBD\SnackServiceBD.cs" />
     <Compile Include="ImplementationsList\MainServiceList.cs" />
     <Compile Include="ImplementationsList\RefrigeratorServiceList.cs" />
     <Compile Include="ImplementationsList\SnackServiceList.cs" />
@@ -57,12 +86,29 @@
     <Compile Include="ImplementationsList\СuocoServiceList.cs" />
     <Compile Include="Interfaces\IMainService.cs" />
     <Compile Include="Interfaces\IRefrigeratorService.cs" />
+    <Compile Include="Interfaces\IReportService .cs" />
     <Compile Include="Interfaces\ISnackService.cs" />
     <Compile Include="Interfaces\IАcquirenteService.cs" />
     <Compile Include="Interfaces\IСonstituentService.cs" />
     <Compile Include="Interfaces\IСuocoService.cs" />
+    <Compile Include="Migrations\201805131228188_FirstMigration.cs" />
+    <Compile Include="Migrations\201805131228188_FirstMigration.Designer.cs">
+      <DependentUpon>201805131228188_FirstMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805131344140_SecondMigration.cs" />
+    <Compile Include="Migrations\201805131344140_SecondMigration.Designer.cs">
+      <DependentUpon>201805131344140_SecondMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\AcquirenteVitaAssassinaModel.cs" />
     <Compile Include="ViewModels\ConstituentSnackViewModels.cs" />
+    <Compile Include="ViewModels\RefregiratorsLoadViewModel.cs" />
     <Compile Include="ViewModels\RefrigeratorViewModels.cs" />
     <Compile Include="ViewModels\RefrigeratorConstituentViewModels.cs" />
     <Compile Include="ViewModels\SnackViewModels.cs" />
@@ -77,6 +123,22 @@
       <Name>MyBistroModel</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+    <None Include="Resources\TIMCYR.TTF" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201805131228188_FirstMigration.resx">
+      <DependentUpon>201805131228188_FirstMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805131344140_SecondMigration.resx">
+      <DependentUpon>201805131344140_SecondMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

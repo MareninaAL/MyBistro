@@ -28,5 +28,11 @@ namespace MyBistro
         public DateTime DateCreate { get; set; } // дата Cоздания 
 
         public DateTime? DateImplement { get; set; } // дата иCполнения
+
+        public virtual Аcquirente Аcquirente { get; set; }
+
+        public virtual Snack Snack { get; set; }
+
+        public virtual Cuoco Cuoco { get; set; }
     }
 }
