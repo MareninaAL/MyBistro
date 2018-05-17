@@ -17,5 +17,9 @@ namespace MyBistro
         public string ConstituentName { get; set; }
 
         public int Count { get; set; }
+
+        public virtual Snack Snack { get; set; }
+
+        public virtual Constituent Constituent { get; set; }
     }
 }
