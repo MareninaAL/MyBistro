@@ -1,9 +1,12 @@
-﻿using MyBistroService.ImplementationsList;
+﻿using MyBistroService;
+using MyBistroService.ImplementationsBD;
+using MyBistroService.ImplementationsList;
 using MyBistroService.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -31,12 +34,14 @@ namespace BistroWeb
         public static IUnityContainer BuildUnityContainer()
         {
             var currentContainer = new UnityContainer();
-            currentContainer.RegisterType<IАcquirenteService, АcquirenteServiceList>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<IConstituentService, ConstituentServiceList>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<ICuocoService, CuocoServiceList>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<ISnackService, SnackServiceList>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<IRefrigeratorService, RefrigeratorServiceList>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<IMainService, MainServiceList>(new HierarchicalLifetimeManager());
+            currentContainer.RegisterType<DbContext, BistroDbContext>(new HierarchicalLifetimeManager());
+
+            currentContainer.RegisterType<IАcquirenteService, AcquirenteServiceBD>(new HierarchicalLifetimeManager());
+            currentContainer.RegisterType<IConstituentService, ConstituentServiceBD>(new HierarchicalLifetimeManager());
+            currentContainer.RegisterType<ICuocoService, CuocoServiceBD>(new HierarchicalLifetimeManager());
+            currentContainer.RegisterType<ISnackService, SnackServiceBD>(new HierarchicalLifetimeManager());
+            currentContainer.RegisterType<IRefrigeratorService, RefrigeratorServiceBD>(new HierarchicalLifetimeManager());
+            currentContainer.RegisterType<IMainService, MainServiceBD>(new HierarchicalLifetimeManager());
 
             return currentContainer;
         }
