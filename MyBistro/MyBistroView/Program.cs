@@ -37,6 +37,7 @@ namespace MyBistroView
             currentContainer.RegisterType<IRefrigeratorService, RefrigeratorServiceBD>(new HierarchicalLifetimeManager());
             currentContainer.RegisterType<IMainService, MainServiceBD>(new HierarchicalLifetimeManager());
 
+            currentContainer.RegisterType<IReportService, ReportServiceBD>(new HierarchicalLifetimeManager());
             return currentContainer;
         }
     }

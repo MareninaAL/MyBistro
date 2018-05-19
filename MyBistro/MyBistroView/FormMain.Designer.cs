@@ -36,10 +36,14 @@
             this.CкладыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CотрудникиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.пополнитьCкладToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.отчетыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.заказыКлиентовToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.загруженностьСкладовToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.прайсизделийToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonPayVitaAssassina = new System.Windows.Forms.Button();
             this.buttonVitaAssassinaReady = new System.Windows.Forms.Button();
             this.buttonTakeVitaAssassinaInWork = new System.Windows.Forms.Button();
-            this.buttonCreateVitaAssassina = new System.Windows.Forms.Button(); 
+            this.buttonCreateVitaAssassina = new System.Windows.Forms.Button();
             this.dataGridView = new System.Windows.Forms.DataGridView();
             this.buttonRef = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
@@ -50,7 +54,8 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.CправочникиToolStripMenuItem,
-            this.пополнитьCкладToolStripMenuItem});
+            this.пополнитьCкладToolStripMenuItem,
+            this.отчетыToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1049, 24);
@@ -107,11 +112,43 @@
             // пополнитьCкладToolStripMenuItem
             // 
             this.пополнитьCкладToolStripMenuItem.Name = "пополнитьCкладToolStripMenuItem";
-            this.пополнитьCкладToolStripMenuItem.Size = new System.Drawing.Size(115, 20);
+            this.пополнитьCкладToolStripMenuItem.Size = new System.Drawing.Size(117, 20);
             this.пополнитьCкладToolStripMenuItem.Text = "Пополнить Cклад";
             this.пополнитьCкладToolStripMenuItem.Click += new System.EventHandler(this.пополнитьCкладToolStripMenuItem_Click);
             // 
-            // buttonPayOrder
+            // отчетыToolStripMenuItem
+            // 
+            this.отчетыToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.заказыКлиентовToolStripMenuItem,
+            this.загруженностьСкладовToolStripMenuItem,
+            this.прайсизделийToolStripMenuItem});
+            this.отчетыToolStripMenuItem.Name = "отчетыToolStripMenuItem";
+            this.отчетыToolStripMenuItem.Size = new System.Drawing.Size(60, 20);
+            this.отчетыToolStripMenuItem.Text = "Отчеты";
+            this.отчетыToolStripMenuItem.Click += new System.EventHandler(this.отчетыToolStripMenuItem_Click);
+            // 
+            // заказыКлиентовToolStripMenuItem
+            // 
+            this.заказыКлиентовToolStripMenuItem.Name = "заказыКлиентовToolStripMenuItem";
+            this.заказыКлиентовToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.заказыКлиентовToolStripMenuItem.Text = "заказы клиентов";
+            this.заказыКлиентовToolStripMenuItem.Click += new System.EventHandler(this.заказыКлиентовToolStripMenuItem_Click);
+            // 
+            // загруженностьСкладовToolStripMenuItem
+            // 
+            this.загруженностьСкладовToolStripMenuItem.Name = "загруженностьСкладовToolStripMenuItem";
+            this.загруженностьСкладовToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.загруженностьСкладовToolStripMenuItem.Text = "загруженность складов";
+            this.загруженностьСкладовToolStripMenuItem.Click += new System.EventHandler(this.загруженностьСкладовToolStripMenuItem_Click);
+            // 
+            // прайсизделийToolStripMenuItem
+            // 
+            this.прайсизделийToolStripMenuItem.Name = "прайсизделийToolStripMenuItem";
+            this.прайсизделийToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.прайсизделийToolStripMenuItem.Text = "прайс изделий";
+            this.прайсизделийToolStripMenuItem.Click += new System.EventHandler(this.прайсизделийToolStripMenuItem_Click);
+            // 
+            // buttonPayVitaAssassina
             // 
             this.buttonPayVitaAssassina.Location = new System.Drawing.Point(888, 200);
             this.buttonPayVitaAssassina.Name = "buttonPayVitaAssassina";
@@ -121,7 +158,7 @@
             this.buttonPayVitaAssassina.UseVisualStyleBackColor = true;
             this.buttonPayVitaAssassina.Click += new System.EventHandler(this.buttonPayOrder_Click);
             // 
-            // buttonOrderReady
+            // buttonVitaAssassinaReady
             // 
             this.buttonVitaAssassinaReady.Location = new System.Drawing.Point(888, 148);
             this.buttonVitaAssassinaReady.Name = "buttonVitaAssassinaReady";
@@ -131,7 +168,7 @@
             this.buttonVitaAssassinaReady.UseVisualStyleBackColor = true;
             this.buttonVitaAssassinaReady.Click += new System.EventHandler(this.buttonOrderReady_Click);
             // 
-            // buttonTakeOrderInWork
+            // buttonTakeVitaAssassinaInWork
             // 
             this.buttonTakeVitaAssassinaInWork.Location = new System.Drawing.Point(888, 101);
             this.buttonTakeVitaAssassinaInWork.Name = "buttonTakeVitaAssassinaInWork";
@@ -141,7 +178,7 @@
             this.buttonTakeVitaAssassinaInWork.UseVisualStyleBackColor = true;
             this.buttonTakeVitaAssassinaInWork.Click += new System.EventHandler(this.buttonTakeOrderInWork_Click);
             // 
-            // buttonCreateOrder
+            // buttonCreateVitaAssassina
             // 
             this.buttonCreateVitaAssassina.Location = new System.Drawing.Point(888, 50);
             this.buttonCreateVitaAssassina.Name = "buttonCreateVitaAssassina";
@@ -213,6 +250,10 @@
         private System.Windows.Forms.Button buttonCreateVitaAssassina;
         private System.Windows.Forms.DataGridView dataGridView;
         private System.Windows.Forms.Button buttonRef;
+        private System.Windows.Forms.ToolStripMenuItem отчетыToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem заказыКлиентовToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem загруженностьСкладовToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem прайсизделийToolStripMenuItem;
     }
 }
 
