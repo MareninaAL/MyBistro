@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MyBistroService
 {
-    [Table("BistroDatabase")]
+    [Table("BistroWPFDatabase")]
     public class BistroDbContext : DbContext
     {
         public BistroDbContext()

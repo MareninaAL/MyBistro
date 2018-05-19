@@ -31,12 +31,14 @@ namespace BistroWeb
         public static IUnityContainer BuildUnityContainer()
         {
             var currentContainer = new UnityContainer();
-            currentContainer.RegisterType<IАcquirenteService, АcquirenteServiceList>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<IConstituentService, ConstituentServiceList>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<ICuocoService, CuocoServiceList>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<ISnackService, SnackServiceList>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<IRefrigeratorService, RefrigeratorServiceList>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<IMainService, MainServiceList>(new HierarchicalLifetimeManager());
+            currentContainer.RegisterType<dbcontext, который, BistroDbContext>(новый HierarchicalLifetimeManager());
+
+            currentContainer.RegisterType<яАcquirenteService, AcquirenteServiceBD>(новый HierarchicalLifetimeManager());
+            currentContainer.RegisterType<IConstituentService, ConstituentServiceBD>(новый HierarchicalLifetimeManager());
+            currentContainer.RegisterType<ICuocoService, CuocoServiceBD>(новый HierarchicalLifetimeManager());
+            currentContainer.RegisterType<ISnackService, SnackServiceBD>(новый HierarchicalLifetimeManager());
+            currentContainer.RegisterType<IRefrigeratorService, RefrigeratorServiceBD>(новый HierarchicalLifetimeManager());
+            currentContainer.RegisterType<IMainService, MainServiceBD>(новый HierarchicalLifetimeManager());
 
             return currentContainer;
         }
