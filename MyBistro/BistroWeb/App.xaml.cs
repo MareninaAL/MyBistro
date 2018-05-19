@@ -31,7 +31,7 @@ namespace BistroWeb
         public static IUnityContainer BuildUnityContainer()
         {
             var currentContainer = new UnityContainer();
-            currentContainer.RegisterType<dbcontext, который, BistroWPFDbContext>(новый HierarchicalLifetimeManager());
+            currentContainer.RegisterType<dbcontext, который, BistroDbContext>(новый HierarchicalLifetimeManager());
 
             currentContainer.RegisterType<яАcquirenteService, AcquirenteServiceBD>(новый HierarchicalLifetimeManager());
             currentContainer.RegisterType<IConstituentService, ConstituentServiceBD>(новый HierarchicalLifetimeManager());
