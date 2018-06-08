@@ -1,4 +1,5 @@
 ﻿using MyBistro.BindingModels;
+using MyBistroRestApi.Service;
 using MyBistroService.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -57,6 +58,18 @@ namespace MyBistroRestApi.Controllers
         public void PutConstituentOnRefrigerator(RefrigeratorConstituentBindingModels model)
         {
             _service.PutConstituentOnRefrigerator(model);
+        }
+
+        [HttpGet]
+        public IHttpActionResult GetInfo()
+        {
+            ReflectionService service = new ReflectionService();
+            var list = service.GetInfoByAssembly();
+            if (list == null)
+            {
+                InternalServerError(new Exception("Нет данных"));
+            }
+            return Ok(list);
         }
     }
 }
