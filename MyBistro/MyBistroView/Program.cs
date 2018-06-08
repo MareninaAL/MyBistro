@@ -18,27 +18,28 @@ namespace MyBistroView
         [STAThread]
         static void Main()
         {
-            var container = BuildUnityContainer();
+            APIAcquirente.Connect();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(container.Resolve<FormMain>());
+            Application.Run(new FormMain());
         }
 
-        public static IUnityContainer BuildUnityContainer()
-        {
-            var currentContainer = new UnityContainer();
-            currentContainer.RegisterType<DbContext, BistroDbContext>(new HierarchicalLifetimeManager());
+        /* public static IUnityContainer BuildUnityContainer()
+         {
+             var currentContainer = new UnityContainer();
+             currentContainer.RegisterType<DbContext, BistroDbContext>(new HierarchicalLifetimeManager());
 
-            currentContainer.RegisterType<IАcquirenteService, AcquirenteServiceBD>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<IConstituentService, ConstituentServiceBD>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<ICuocoService, CuocoServiceBD>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<ISnackService, SnackServiceBD>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<IRefrigeratorService, RefrigeratorServiceBD>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<IMainService, MainServiceBD>(new HierarchicalLifetimeManager());
+             currentContainer.RegisterType<IАcquirenteService, AcquirenteServiceBD>(new HierarchicalLifetimeManager());
+             currentContainer.RegisterType<IConstituentService, ConstituentServiceBD>(new HierarchicalLifetimeManager());
+             currentContainer.RegisterType<ICuocoService, CuocoServiceBD>(new HierarchicalLifetimeManager());
+             currentContainer.RegisterType<ISnackService, SnackServiceBD>(new HierarchicalLifetimeManager());
+             currentContainer.RegisterType<IRefrigeratorService, RefrigeratorServiceBD>(new HierarchicalLifetimeManager());
+             currentContainer.RegisterType<IMainService, MainServiceBD>(new HierarchicalLifetimeManager());
 
-            currentContainer.RegisterType<IReportService, ReportServiceBD>(new HierarchicalLifetimeManager());
-            return currentContainer;
-        }
+             currentContainer.RegisterType<IReportService, ReportServiceBD>(new HierarchicalLifetimeManager());
+             return currentContainer; 
+
+    }*/
     }
 }

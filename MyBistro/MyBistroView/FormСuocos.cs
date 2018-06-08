@@ -1,4 +1,5 @@
-﻿using MyBistro.ViewModels;
+﻿using MyBistro.BindingModels;
+using MyBistro.ViewModels;
 using MyBistroService.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -16,15 +17,15 @@ namespace MyBistroView
 {
     public partial class FormCuocos : Form
     {
-        [Dependency]
+       /* [Dependency]
         public new IUnityContainer Container { get; set; }
 
-        private readonly ICuocoService service;
+        private readonly ICuocoService service; */ 
 
-        public FormCuocos (ICuocoService service)
+        public FormCuocos (/*ICuocoService service*/ )
         {
             InitializeComponent();
-            this.service = service;
+           // this.service = service;
         }
 
         private void FormCuocos_Load(object sender, EventArgs e)
@@ -36,12 +37,21 @@ namespace MyBistroView
         {
             try
             {
-                List<CuocoViewModels> list = service.GetList();
-                if (list != null)
+                // List<CuocoViewModels> list = service.GetList();
+                var response = APIAcquirente.GetRequest("api/Cuoco/GetList");
+                if (response.Result.IsSuccessStatusCode)
                 {
-                    dataGridView.DataSource = list;
-                    dataGridView.Columns[0].Visible = false;
-                    dataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    List<CuocoViewModels> list = APIAcquirente.GetElement<List<CuocoViewModels>>(response);
+                    if (list != null)
+                    {
+                        dataGridView.DataSource = list;
+                        dataGridView.Columns[0].Visible = false;
+                        dataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    }
+                }
+                else
+                {
+                    throw new Exception(APIAcquirente.GetError(response));
                 }
             }
             catch (Exception ex)
@@ -52,7 +62,8 @@ namespace MyBistroView
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormCuoco>();
+            //   var form = Container.Resolve<FormCuoco>();
+            var form = new FormCuoco();
             if (form.ShowDialog() == DialogResult.OK)
             {
                 LoadData();
@@ -63,7 +74,8 @@ namespace MyBistroView
         {
             if (dataGridView.SelectedRows.Count == 1)
             {
-                var form = Container.Resolve<FormCuoco>();
+                // var form = Container.Resolve<FormCuoco>();
+                var form = new FormCuoco();
                 form.Id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 if (form.ShowDialog() == DialogResult.OK)
                 {
@@ -81,7 +93,12 @@ namespace MyBistroView
                     int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                     try
                     {
-                        service.DelElement(id);
+                        //      service.DelElement(id);
+                        var response = APIAcquirente.PostRequest("api/Cuoco/DelElement", new АcquirenteBindingModels { Id = id });
+                        if (!response.Result.IsSuccessStatusCode)
+                        {
+                            throw new Exception(APIAcquirente.GetError(response));
+                        }
                     }
                     catch (Exception ex)
                     {

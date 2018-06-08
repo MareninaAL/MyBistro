@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,19 +18,19 @@ namespace MyBistroView
 {
     public partial class FormConstituent : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
+       /* [Dependency]
+        public new IUnityContainer Container { get; set; } */ 
 
         public int Id { set { id = value; } }
 
-        private readonly IConstituentService service;
+        //private readonly IConstituentService service;
 
         private int? id;
 
-        public FormConstituent(IConstituentService service)
+        public FormConstituent(/*IConstituentService service*/ )
         {
             InitializeComponent();
-            this.service = service;
+           // this.service = service;
         }
 
         private void FormComponent_Load(object sender, EventArgs e)
@@ -38,10 +39,16 @@ namespace MyBistroView
             {
                 try
                 {
-                    ConstituentViewModels view = service.GetElement(id.Value);
-                    if (view != null)
+                    // ConstituentViewModels view = service.GetElement(id.Value);
+                    var response = APIAcquirente.GetRequest("api/Constituent/Get/" + id.Value);
+                    if (response.Result.IsSuccessStatusCode)
                     {
-                        textBoxName.Text = view.ConstituentName;
+                        var component = APIAcquirente.GetElement<ConstituentViewModels>(response);
+                        textBoxName.Text = component.ConstituentName;
+                    }
+                    else
+                    {
+                        throw new Exception(APIAcquirente.GetError(response));
                     }
                 }
                 catch (Exception ex)
@@ -60,24 +67,34 @@ namespace MyBistroView
             }
             try
             {
+                Task<HttpResponseMessage> response;
                 if (id.HasValue)
                 {
-                    service.UpdElement(new ConstituentBindingModels
+                    response = APIAcquirente.PostRequest("api/Constituent/UpdElement", new ConstituentBindingModels
+                    //   service.UpdElement(new ConstituentBindingModels
                     {
                         Id = id.Value,
                         ConstituentName = textBoxName.Text
-                    });
+                    }); 
                 }
                 else
                 {
-                    service.AddElement(new ConstituentBindingModels
+                    response = APIAcquirente.PostRequest("api/Constituent/AddElement", new ConstituentBindingModels
+                    //service.AddElement(new ConstituentBindingModels
                     {
                         ConstituentName = textBoxName.Text
-                    });
+                    }); 
                 }
-                MessageBox.Show("Cохранение прошло уCпешно", "Cообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                DialogResult = DialogResult.OK;
-                Close();
+                if (response.Result.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Cохранение прошло уCпешно", "Cообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
+                else
+                {
+                    throw new Exception(APIAcquirente.GetError(response));
+                }
             }
             catch (Exception ex)
             {

@@ -12,24 +12,25 @@ using Unity.Attributes;
 using MyBistroService.Interfaces;
 using MyBistro.ViewModels;
 using MyBistro.BindingModels;
+using System.Net.Http;
 
 namespace MyBistroView
 {
     public partial class FormRefrigerator : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
+        /*[Dependency]
+        public new IUnityContainer Container { get; set; } */
 
         public int Id { set { id = value; } }
 
-        private readonly IRefrigeratorService service;
+    //    private readonly IRefrigeratorService service;
 
         private int? id;
 
-        public FormRefrigerator(IRefrigeratorService service)
+        public FormRefrigerator(/*IRefrigeratorService service*/)
         {
             InitializeComponent();
-            this.service = service;
+          //  this.service = service;
         }
 
         private void FormRefrigerator_Load(object sender, EventArgs e)
@@ -38,15 +39,21 @@ namespace MyBistroView
             {
                 try
                 {
-                    RefrigeratorViewModels view = service.GetElement(id.Value);
-                    if (view != null)
+                    var response = APIAcquirente.GetRequest("api/Refrigerator/Get/" + id.Value);
+                    //RefrigeratorViewModels view = service.GetElement(id.Value);
+                    if (response.Result.IsSuccessStatusCode)
                     {
-                        textBoxName.Text = view.RefrigeratorName;
-                        dataGridView.DataSource = view.RefrigeratorConstituent;
+                        var stock = APIAcquirente.GetElement<RefrigeratorViewModels>(response);
+                        textBoxName.Text = stock.RefrigeratorName;
+                        dataGridView.DataSource = stock.RefrigeratorConstituent;
                         dataGridView.Columns[0].Visible = false;
                         dataGridView.Columns[1].Visible = false;
                         dataGridView.Columns[2].Visible = false;
                         dataGridView.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    }
+                    else
+                    {
+                        throw new Exception(APIAcquirente.GetError(response));
                     }
                 }
                 catch (Exception ex)
@@ -65,9 +72,15 @@ namespace MyBistroView
             }
             try
             {
+                Task<HttpResponseMessage> response;
                 if (id.HasValue)
                 {
-                    service.UpdElement(new RefrigeratorBindingModels
+                    /*service.UpdElement(new RefrigeratorBindingModels
+                    {
+                        Id = id.Value,
+                        RefrigeratorName = textBoxName.Text
+                    }); */
+                    response = APIAcquirente.PostRequest("api/Refrigerator/UpdElement", new RefrigeratorBindingModels
                     {
                         Id = id.Value,
                         RefrigeratorName = textBoxName.Text
@@ -75,14 +88,25 @@ namespace MyBistroView
                 }
                 else
                 {
-                    service.AddElement(new RefrigeratorBindingModels
+                    /*service.AddElement(new RefrigeratorBindingModels
+                    {
+                        RefrigeratorName = textBoxName.Text
+                    }); */
+                    response = APIAcquirente.PostRequest("api/Refrigerator/AddElement", new RefrigeratorBindingModels
                     {
                         RefrigeratorName = textBoxName.Text
                     });
                 }
-                MessageBox.Show("Cохранение прошло уCпешно", "Cообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                DialogResult = DialogResult.OK;
-                Close();
+                if (response.Result.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Сохранение прошло успешно", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
+                else
+                {
+                    throw new Exception(APIAcquirente.GetError(response));
+                }
             }
             catch (Exception ex)
             {

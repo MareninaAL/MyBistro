@@ -11,20 +11,21 @@ using System.Windows.Forms;
 using MyBistro.ViewModels;
 using Unity;
 using Unity.Attributes;
+using MyBistro.BindingModels;
 
 namespace MyBistroView
 {
     public partial class FormRefrigerators : Form
     {
-        [Dependency]
+      /*  [Dependency]
         public new IUnityContainer Container { get; set; }
 
-        private readonly IRefrigeratorService service;
+        private readonly IRefrigeratorService service; */
 
-        public FormRefrigerators(IRefrigeratorService service)
+        public FormRefrigerators(/*IRefrigeratorService service*/)
         {
             InitializeComponent();
-            this.service = service;
+           // this.service = service;
         }
 
         private void FormRefrigerators_Load(object sender, EventArgs e)
@@ -36,12 +37,22 @@ namespace MyBistroView
         {
             try
             {
-                List<RefrigeratorViewModels> list = service.GetList();
-                if (list != null)
+                var response = APIAcquirente.GetRequest("api/Refrigerator/GetList");
+                // List<RefrigeratorViewModels> list = service.GetList();
+                if (response.Result.IsSuccessStatusCode)
                 {
-                    dataGridView.DataSource = list;
-                    dataGridView.Columns[0].Visible = false;
-                    dataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    List<RefrigeratorViewModels> list = APIAcquirente.GetElement<List<RefrigeratorViewModels>>(response);
+                    if (list != null)
+                    {
+                        dataGridView.DataSource = list;
+                        dataGridView.Columns[0].Visible = false;
+                        dataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    }
+                }
+
+                else
+                {
+                    throw new Exception(APIAcquirente.GetError(response));
                 }
             }
             catch (Exception ex)
@@ -52,7 +63,8 @@ namespace MyBistroView
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormRefrigerator>();
+            // var form = Container.Resolve<FormRefrigerator>();
+            var form = new FormRefrigerator();
             if (form.ShowDialog() == DialogResult.OK)
             {
                 LoadData();
@@ -63,7 +75,8 @@ namespace MyBistroView
         {
             if (dataGridView.SelectedRows.Count == 1)
             {
-                var form = Container.Resolve<FormRefrigerator>();
+                //  var form = Container.Resolve<FormRefrigerator>();
+                var form = new FormRefrigerator();
                 form.Id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 if (form.ShowDialog() == DialogResult.OK)
                 {
@@ -81,7 +94,12 @@ namespace MyBistroView
                     int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                     try
                     {
-                        service.DelElement(id);
+                        // service.DelElement(id);
+                        var response = APIAcquirente.PostRequest("api/Refrigerator/DelElement", new АcquirenteBindingModels { Id = id });
+                        if (!response.Result.IsSuccessStatusCode)
+                        {
+                            throw new Exception(APIAcquirente.GetError(response));
+                        }
                     }
                     catch (Exception ex)
                     {
