@@ -26,9 +26,6 @@ namespace MyBistroView
         {
             try
             {
-                /* var response = APIAcquirente.GetRequest("api/Report/GetRefregiratorsLoad");
-                  if (response.Result.IsSuccessStatusCode)
-                  { */
                 dataGridView.Rows.Clear();
                 foreach (var elem in Task.Run(() => APIAcquirente.GetRequestData<List<RefregiratorsLoadViewModel>>("api/Report/GetRefregiratorsLoad")).Result)
                 {
@@ -40,11 +37,6 @@ namespace MyBistroView
                     dataGridView.Rows.Add(new object[] { "Итого", "", elem.TotalCount });
                     dataGridView.Rows.Add(new object[] { });
                 }
-                /*    } 
-                    else
-                   {
-                       throw new Exception(APIAcquirente.GetError(response));
-                   }  */
             }
             catch (Exception ex)
             {
@@ -64,25 +56,6 @@ namespace MyBistroView
             };
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                /* try
-                 {
-                     var response = APIAcquirente.PostRequest("api/Report/SaveRefregiratorsLoad", new ReportBindingModel
-                     {
-                         FileName = sfd.FileName
-                     });
-                     if (response.Result.IsSuccessStatusCode)
-                     {
-                         MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                     }
-                     else
-                     {
-                         throw new Exception(APIAcquirente.GetError(response));
-                     }
-                 }
-                 catch (Exception ex)
-                 {
-                     MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                 } */
                 string fileName = sfd.FileName;
                 Task task = Task.Run(() => APIAcquirente.PostRequestData("api/Report/SaveRefregiratorsLoad", new ReportBindingModel
                 {

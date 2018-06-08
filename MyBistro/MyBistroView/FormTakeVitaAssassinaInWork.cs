@@ -36,9 +36,6 @@ namespace MyBistroView
                     MessageBox.Show("Не указан заказ", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Close();
                 }
-              /*  var response = APIAcquirente.GetRequest("api/Cuoco/GetList");
-                if (response.Result.IsSuccessStatusCode)
-                { */ 
                     List<CuocoViewModels> list = Task.Run(() => APIAcquirente.GetRequestData<List<CuocoViewModels>>("api/Cuoco/GetList")).Result;
                 if (list != null)
                     {
@@ -47,11 +44,6 @@ namespace MyBistroView
                         comboBoxImplementer.DataSource = list;
                         comboBoxImplementer.SelectedItem = null;
                     }
-              /*  }
-                else
-                {
-                    throw new Exception(APIAcquirente.GetError(response));
-                } */
             }
             catch (Exception ex)
             {
@@ -72,21 +64,6 @@ namespace MyBistroView
             }
             try
             {
-                /* var response = APIAcquirente.PostRequest("api/Main/TakeVitaAssassinarInWork", new VitaAssassinaBindingModels
-                 {
-                     Id = id.Value,
-                     CuocoId = Convert.ToInt32(comboBoxImplementer.SelectedValue)
-                 });
-                 if (response.Result.IsSuccessStatusCode)
-                 {
-                     MessageBox.Show("Сохранение прошло успешно", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                     DialogResult = DialogResult.OK;
-                     Close();
-                 }
-                 else
-                 {
-                     throw new Exception(APIAcquirente.GetError(response));
-                 } */
                 int implementerId = Convert.ToInt32(comboBoxImplementer.SelectedValue);
                 Task task = Task.Run(() => APIAcquirente.PostRequestData("api/Main/TakeVitaAssassinarInWork", new VitaAssassinaBindingModels
                 {
@@ -120,7 +97,6 @@ namespace MyBistroView
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
-//DialogResult = DialogResult.Cancel;
             Close();
         }
     }

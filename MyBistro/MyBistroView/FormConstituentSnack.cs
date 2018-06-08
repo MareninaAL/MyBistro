@@ -31,18 +31,10 @@ namespace MyBistroView
         {
             try
             {
-                /* var response = APIAcquirente.GetRequest("api/Constituent/GetList");
-                  if (response.Result.IsSuccessStatusCode)
-                  { */
                 comboBoxConstituent.DisplayMember = "ConstituentName";
                       comboBoxConstituent.ValueMember = "Id";
                       comboBoxConstituent.DataSource = Task.Run(() => APIAcquirente.GetRequestData<List<ConstituentViewModels>>("api/Constituent/GetList")).Result;
                 comboBoxConstituent.SelectedItem = null;
-                /* }
-                 else
-                {
-                    throw new Exception(APIAcquirente.GetError(response));
-                } */
             }
             catch (Exception ex)
             {
@@ -99,7 +91,6 @@ namespace MyBistroView
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
-            //DialogResult = DialogResult.Cancel;
             Close();
         }
     }

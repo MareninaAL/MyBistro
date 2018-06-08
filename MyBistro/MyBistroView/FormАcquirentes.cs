@@ -32,9 +32,6 @@ namespace MyBistroView
         {
             try
             {
-               /* var response = APIAcquirente.GetRequest("api/Аcquirente/GetList");
-                if (response.Result.IsSuccessStatusCode)
-                { */ 
                     List<АcquirenteViewModels> list = Task.Run(() => APIAcquirente.GetRequestData<List<АcquirenteViewModels>>("api/Аcquirente/GetList")).Result;
                 if (list != null)
                     {
@@ -42,11 +39,6 @@ namespace MyBistroView
                         dataGridView.Columns[0].Visible = false;
                         dataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                     }
-             /*   }
-                else
-                {
-                    throw new Exception(APIAcquirente.GetError(response));
-                } */
             }
             catch (Exception ex)
             {
@@ -61,10 +53,6 @@ namespace MyBistroView
         private void buttonAdd_Click(object sender, EventArgs e)
         {
           var form = new FormАcquirente();
-            /* if (form.ShowDialog() == DialogResult.OK)
-             {
-                 LoadData();
-             } */
             form.ShowDialog();
         }
 
@@ -72,12 +60,6 @@ namespace MyBistroView
         {
             if (dataGridView.SelectedRows.Count == 1)
             {
-                /*  var form = new FormАcquirente();
-                  form.Id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
-                  if (form.ShowDialog() == DialogResult.OK)
-                  {
-                      LoadData();
-                  } */
                 var form = new FormАcquirente
                 {
                     Id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value)
@@ -93,19 +75,6 @@ namespace MyBistroView
                 if (MessageBox.Show("Удалить запиCь", "ВопроC", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
-                    /*  try
-                      {
-                          var response = APIAcquirente.PostRequest("api/Acquirente/DelElement", new АcquirenteBindingModels { Id = id });
-                          if (!response.Result.IsSuccessStatusCode)
-                          {
-                              throw new Exception(APIAcquirente.GetError(response));
-                          }
-                      }
-                      catch (Exception ex)
-                      {
-                          MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                      }
-                      LoadData(); */
                     Task task = Task.Run(() => APIAcquirente.PostRequestData("api/Acquirente/DelElement", new АcquirenteBindingModels { Id = id }));
 
                     task.ContinueWith((prevTask) => MessageBox.Show("Запись удалена. Обновите список", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information),

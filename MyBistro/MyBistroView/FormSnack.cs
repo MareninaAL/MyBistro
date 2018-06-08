@@ -37,19 +37,11 @@ namespace MyBistroView
             {
                 try
                 {
-                 /*   var response = APIAcquirente.GetRequest("api/Snack/Get/" + id.Value);
-                    if (response.Result.IsSuccessStatusCode)
-                    { */ 
                         var snack = Task.Run(() => APIAcquirente.GetRequestData<SnackViewModels>("api/Snack/Get/" + id.Value)).Result;
                     textBoxName.Text = snack.SnackName;
                         textBoxPrice.Text = snack.Price.ToString();
                         ConstituentSnack = snack.ConstituentSnack;
                         LoadData();
-                 //   }
-                    /* else
-                     {
-                         throw new Exception(APIAcquirente.GetError(response));
-                     } */
                 }
                 catch (Exception ex)
                 {
@@ -159,57 +151,6 @@ namespace MyBistroView
                 MessageBox.Show("Заполните компоненты", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            /* try
-             {
-
-                 List<ConstituentSnackBindingModels> productComponentBM = new List<ConstituentSnackBindingModels>();
-                 for (int i = 0; i < ConstituentSnack.Count; ++i)
-                 {
-                     productComponentBM.Add(new ConstituentSnackBindingModels
-                     {
-                         Id = ConstituentSnack[i].Id,
-                         SnackId = ConstituentSnack[i].SnackId,
-                         ConstituentId = ConstituentSnack[i].ConstituentId,
-                         Count = ConstituentSnack[i].Count
-                     });
-                 }
-                 Task<HttpResponseMessage> response;
-                 if (id.HasValue)
-                 {
-                     response = APIAcquirente.PostRequest("api/Snack/UpdElement", new SnackBindingModels
-                     {
-                         Id = id.Value,
-                         SnackName = textBoxName.Text,
-                         Price = Convert.ToInt32(textBoxPrice.Text),
-                         ConstituentSnack = productComponentBM
-                     });
-                 }
-                 else
-                 {
-                     response = APIAcquirente.PostRequest("api/Snack/AddElement", new SnackBindingModels
-                     {
-                           SnackName = textBoxName.Text,
-                           Price = Convert.ToInt32(textBoxPrice.Text),
-                           ConstituentSnack = productComponentBM
-                       }); 
-
-                 }
-
-                 if (response.Result.IsSuccessStatusCode)
-                 {
-                     MessageBox.Show("Сохранение прошло успешно", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                     DialogResult = DialogResult.OK;
-                     Close();
-                 }
-                 else
-                 {
-                     throw new Exception(APIAcquirente.GetError(response));
-                 }
-             }
-             catch (Exception ex)
-             {
-                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-             } */
             List<ConstituentSnackBindingModels> productComponentBM = new List<ConstituentSnackBindingModels>();
             for (int i = 0; i < ConstituentSnack.Count; ++i)
             {
@@ -261,7 +202,6 @@ namespace MyBistroView
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
-           // DialogResult = DialogResult.Cancel;
             Close();
         }
     }

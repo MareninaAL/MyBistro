@@ -35,16 +35,6 @@ namespace MyBistroView
             {
                 try
                 {
-                    /* var response = APIAcquirente.GetRequest("api/Cuoco/Get/" + id.Value);
-                     if (response.Result.IsSuccessStatusCode)
-                     {
-                         var cuoco = APIAcquirente.GetElement<CuocoViewModels>(response);
-                         textBoxFIO.Text = cuoco.CuocoFIO;
-                     }
-                     else
-                     {
-                         throw new Exception(APIAcquirente.GetError(response));
-                     } */
                     var implementer = Task.Run(() => APIAcquirente.GetRequestData<CuocoViewModels>("api/Cuoco/Get/" + id.Value)).Result;
                     textBoxFIO.Text = implementer.CuocoFIO;
                 }
@@ -66,39 +56,6 @@ namespace MyBistroView
                 MessageBox.Show("Заполните ФИО", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            /*try
-            {
-                Task<HttpResponseMessage> response;
-                if (id.HasValue)
-                {
-                    response = APIAcquirente.PostRequest("api/Cuoco/UpdElement", new CuocoBindingModels
-                    {
-                        Id = id.Value,
-                        CuocoFIO = textBoxFIO.Text
-                    });
-                }
-                else
-                {
-                    response = APIAcquirente.PostRequest("api/Cuoco/AddElement", new CuocoBindingModels
-                    {
-                        CuocoFIO = textBoxFIO.Text
-                    });
-                }
-                if (response.Result.IsSuccessStatusCode)
-                {
-                    MessageBox.Show("Сохранение прошло успешно", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    DialogResult = DialogResult.OK;
-                    Close();
-                }
-                else
-                {
-                    throw new Exception(APIAcquirente.GetError(response));
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            } */
             string fio = textBoxFIO.Text;
             Task task;
             if (id.HasValue)
@@ -135,7 +92,6 @@ namespace MyBistroView
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
-         //   DialogResult = DialogResult.Cancel;
             Close();
         }
     }

@@ -27,9 +27,6 @@ namespace MyBistroView
         {
             try
             {
-               /* var responseC = APIAcquirente.GetRequest("api/Аcquirente/GetList");
-                if (responseC.Result.IsSuccessStatusCode)
-                { */ 
                     List<АcquirenteViewModels> listA = Task.Run(() => APIAcquirente.GetRequestData<List<АcquirenteViewModels>>("api/Аcquirente/GetList")).Result;
                 if (listA != null)
                     {
@@ -38,15 +35,6 @@ namespace MyBistroView
                         comboBoxАcquirente.DataSource = listA;
                         comboBoxАcquirente.SelectedItem = null;
                     }
-              /*  }
-                else
-                {
-                    throw new Exception(APIAcquirente.GetError(responseC));
-                }
-
-                var responseP = APIAcquirente.GetRequest("api/Snack/GetList");
-                if (responseP.Result.IsSuccessStatusCode)
-                { */ 
                     List<SnackViewModels> listC = Task.Run(() => APIAcquirente.GetRequestData<List<SnackViewModels>>("api/Snack/GetList")).Result;
                 if (listC != null)
                     {
@@ -55,12 +43,6 @@ namespace MyBistroView
                         comboBoxSnack.DataSource = listC;
                         comboBoxSnack.SelectedItem = null;
                     }
-                /*  }
-
-                  else
-                  {
-                      throw new Exception(APIAcquirente.GetError(responseP));
-                  } */
                   
             }
             catch (Exception ex)
@@ -79,18 +61,6 @@ namespace MyBistroView
             {
                 try
                 {
-                    /* int id = Convert.ToInt32(comboBoxSnack.SelectedValue);
-                     var responseP = APIAcquirente.GetRequest("api/Snack/Get/" + id);
-                     if (responseP.Result.IsSuccessStatusCode)
-                     {
-                         SnackViewModels product = APIAcquirente.GetElement<SnackViewModels>(responseP);
-                         int count = Convert.ToInt32(textBoxCount.Text);
-                         textBoxSum.Text = (count * (int)product.Price).ToString();
-                     }
-                     else
-                     {
-                         throw new Exception(APIAcquirente.GetError(responseP));
-                     } */
                     int id = Convert.ToInt32(comboBoxSnack.SelectedValue);
                     SnackViewModels product = Task.Run(() => APIAcquirente.GetRequestData<SnackViewModels>("api/Snack/Get/" + id)).Result;
                     int count = Convert.ToInt32(textBoxCount.Text);
@@ -134,30 +104,6 @@ namespace MyBistroView
                 MessageBox.Show("Выберите изделие", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            /* try
-             {
-                 var response = APIAcquirente.PostRequest("api/Main/CreateVitaAssassina", new VitaAssassinaBindingModels
-                 {
-                     АcquirenteId = Convert.ToInt32(comboBoxАcquirente.SelectedValue),
-                     SnackId = Convert.ToInt32(comboBoxSnack.SelectedValue),
-                     Count = Convert.ToInt32(textBoxCount.Text),
-                     Sum = Convert.ToInt32(textBoxSum.Text)
-                 });
-                 if (response.Result.IsSuccessStatusCode)
-                 {
-                     MessageBox.Show("Сохранение прошло успешно", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                     DialogResult = DialogResult.OK;
-                     Close();
-                 }
-                 else
-                 {
-                     throw new Exception(APIAcquirente.GetError(response));
-                 }
-             }
-             catch (Exception ex)
-             {
-                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-             } */
             int clientId = Convert.ToInt32(comboBoxАcquirente.SelectedValue);
             int productId = Convert.ToInt32(comboBoxSnack.SelectedValue);
             int count = Convert.ToInt32(textBoxCount.Text);
@@ -187,7 +133,6 @@ namespace MyBistroView
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
-           // DialogResult = DialogResult.Cancel;
             Close();
         }
     }

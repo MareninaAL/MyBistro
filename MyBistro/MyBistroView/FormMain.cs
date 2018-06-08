@@ -22,9 +22,6 @@ namespace MyBistroView
         {
             try
             {
-                /*var response = APIAcquirente.GetRequest("api/Main/GetList");
-                if (response.Result.IsSuccessStatusCode)
-                { */
                 List<VitaAssassinaViewModels> list = Task.Run(() => APIAcquirente.GetRequestData<List<VitaAssassinaViewModels>>("api/Main/GetList")).Result;
                 if (list != null)
                 {
@@ -108,25 +105,7 @@ namespace MyBistroView
             if (dataGridView.SelectedRows.Count == 1)
             {
                 int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
-                /* try
-                 {
-                     var response = APIAcquirente.PostRequest("api/Main/FinishVitaAssassina", new VitaAssassinaBindingModels
-                     {
-                         Id = id
-                     });
-                     if (response.Result.IsSuccessStatusCode)
-                     {
-                         LoadData();
-                     }
-                     else
-                     {
-                         throw new Exception(APIAcquirente.GetError(response));
-                     }
-                 }
-                 catch (Exception ex)
-                 {
-                     MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                 } */
+                
                 Task task = Task.Run(() => APIAcquirente.PostRequestData("api/Main/FinishVitaAssassina", new VitaAssassinaBindingModels
                 {
                     Id = id
@@ -151,25 +130,7 @@ namespace MyBistroView
             if (dataGridView.SelectedRows.Count == 1)
             {
                 int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
-                /* try
-                 {
-                     var response = APIAcquirente.PostRequest("api/Main/.PayVitaAssassina", new VitaAssassinaBindingModels
-                     {
-                         Id = id
-                     });
-                     if (response.Result.IsSuccessStatusCode)
-                     {
-                         LoadData();
-                     }
-                     else
-                     {
-                         throw new Exception(APIAcquirente.GetError(response));
-                     }
-                 }
-                 catch (Exception ex)
-                 {
-                     MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                 } */
+             
                 Task task = Task.Run(() => APIAcquirente.PostRequestData("api/Main/PayVitaAssassina", new VitaAssassinaBindingModels
                 {
                     Id = id
@@ -208,25 +169,7 @@ namespace MyBistroView
             };
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                /* try
-                 {
-                     var response = APIAcquirente.PostRequest("api/Report/SaveSnackPrice", new ReportBindingModel
-                     {
-                         FileName = sfd.FileName
-                     });
-                     if (response.Result.IsSuccessStatusCode)
-                     {
-                         MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                     }
-                     else
-                     {
-                         throw new Exception(APIAcquirente.GetError(response));
-                     }
-                 }
-                 catch (Exception ex)
-                 {
-                     MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                 } */
+              
                 string fileName = sfd.FileName;
                 Task task = Task.Run(() => APIAcquirente.PostRequestData("api/Report/SaveSnackPrice", new ReportBindingModel
                 {

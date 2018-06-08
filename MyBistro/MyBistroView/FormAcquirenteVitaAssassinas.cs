@@ -44,27 +44,6 @@ namespace MyBistroView
             };
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                /* try
-                 {
-                     var response = APIAcquirente.PostRequest("api/Report/SaveAcquirenteVitaAssassinas", new ReportBindingModel
-                     {
-                         FileName = sfd.FileName,
-                         DateFrom = dateTimePickerFrom.Value,
-                         DateTo = dateTimePickerTo.Value
-                     });
-                     if (response.Result.IsSuccessStatusCode)
-                     {
-                         MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                     }
-                     else
-                     {
-                         throw new Exception(APIAcquirente.GetError(response));
-                     }
-                 }
-                 catch (Exception ex)
-                 {
-                     MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                 } */
                 string fileName = sfd.FileName;
                 Task task = Task.Run(() => APIAcquirente.PostRequestData("api/Report/SaveAcquirenteVitaAssassinas", new ReportBindingModel
                 {
@@ -101,21 +80,6 @@ namespace MyBistroView
                 " по " + dateTimePickerTo.Value.ToShortDateString());
                 reportViewer.LocalReport.SetParameters(parameter);
 
-                /*var response = APIAcquirente.PostRequest("api/Report/GetAcquirenteVitaAssassinas", new ReportBindingModel
-                {
-                    DateFrom = dateTimePickerFrom.Value,
-                    DateTo = dateTimePickerTo.Value
-                });
-                if (response.Result.IsSuccessStatusCode)
-                {
-                    var dataSource = APIAcquirente.GetElement<List<AcquirenteVitaAssassinaModel>>(response);
-                    ReportDataSource source = new ReportDataSource("DataSetOrders", dataSource);
-                    reportViewer.LocalReport.DataSources.Add(source);
-                }
-                else
-                {
-                    throw new Exception(APIAcquirente.GetError(response));
-                } */
                 var dataSource = Task.Run(() => APIAcquirente.PostRequestData<ReportBindingModel, List<AcquirenteVitaAssassinaModel>>("api/Report/GetAcquirenteVitaAssassinas",
                    new ReportBindingModel
                    {
