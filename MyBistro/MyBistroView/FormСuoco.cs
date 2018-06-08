@@ -35,8 +35,8 @@ namespace MyBistroView
             {
                 try
                 {
-                    var implementer = Task.Run(() => APIAcquirente.GetRequestData<CuocoViewModels>("api/Cuoco/Get/" + id.Value)).Result;
-                    textBoxFIO.Text = implementer.CuocoFIO;
+                    var cuoco = Task.Run(() => APIAcquirente.GetRequestData<CuocoViewModels>("api/Cuoco/Get/" + id.Value)).Result;
+                    textBoxFIO.Text = cuoco.CuocoFIO;
                 }
                 catch (Exception ex)
                 {
@@ -60,7 +60,7 @@ namespace MyBistroView
             Task task;
             if (id.HasValue)
             {
-                task = Task.Run(() => APIAcquirente.PostRequestData("api/Implementer/UpdElement", new CuocoBindingModels
+                task = Task.Run(() => APIAcquirente.PostRequestData("api/Cuoco/UpdElement", new CuocoBindingModels
                 {
                     Id = id.Value,
                     CuocoFIO = fio
@@ -68,7 +68,7 @@ namespace MyBistroView
             }
             else
             {
-                task = Task.Run(() => APIAcquirente.PostRequestData("api/Implementer/AddElement", new CuocoBindingModels
+                task = Task.Run(() => APIAcquirente.PostRequestData("api/Cuoco/AddElement", new CuocoBindingModels
                 {
                     CuocoFIO = fio
                 }));

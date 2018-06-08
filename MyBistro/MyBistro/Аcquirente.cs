@@ -16,6 +16,8 @@ namespace MyBistro
         [Required]
         public string АcquirenteFIO { get; set; }
 
+        public string Mail { get; set; }
+
         [ForeignKey("АcquirenteId")]
         public virtual List<VitaAssassina> vitaAssassina { get; set; }
     }

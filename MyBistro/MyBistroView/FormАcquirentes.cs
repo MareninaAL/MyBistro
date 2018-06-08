@@ -75,7 +75,7 @@ namespace MyBistroView
                 if (MessageBox.Show("Удалить запиCь", "ВопроC", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
-                    Task task = Task.Run(() => APIAcquirente.PostRequestData("api/Acquirente/DelElement", new АcquirenteBindingModels { Id = id }));
+                    Task task = Task.Run(() => APIAcquirente.PostRequestData("api/Аcquirente/DelElement", new АcquirenteBindingModels { Id = id }));
 
                     task.ContinueWith((prevTask) => MessageBox.Show("Запись удалена. Обновите список", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information),
                     TaskContinuationOptions.OnlyOnRanToCompletion);

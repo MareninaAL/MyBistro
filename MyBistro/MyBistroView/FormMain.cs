@@ -202,5 +202,11 @@ namespace MyBistroView
             var form = new FormAcquirenteVitaAssassinas();
             form.ShowDialog();
         }
+
+        private void письмаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new FormMails();
+            form.ShowDialog();
+        }
     }
 }

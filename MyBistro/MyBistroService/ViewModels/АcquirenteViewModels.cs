@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyBistroService.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -14,6 +15,12 @@ namespace MyBistro.ViewModels
         public int Id { get; set; }
 
         [DataMember]
+        public string Mail { get; set; }
+
+        [DataMember]
         public string АcquirenteFIO { get; set; }
+
+        [DataMember]
+        public List<MessageInfoViewModel> Messages { get; set; }
     }
 }

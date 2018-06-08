@@ -19,7 +19,7 @@ namespace MyBistroView
         static void Main()
         {
             APIAcquirente.Connect();
-
+            MailClient.Connect();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormMain());
