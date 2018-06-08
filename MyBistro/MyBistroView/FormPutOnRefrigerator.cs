@@ -17,44 +17,53 @@ namespace MyBistroView
 {
     public partial class FormPutOnRefrigerator : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
 
-        private readonly IRefrigeratorService serviceS;
-
-        private readonly IConstituentService serviceC;
-
-        private readonly IMainService serviceM;
-
-        public FormPutOnRefrigerator(IRefrigeratorService serviceS, IConstituentService serviceC, IMainService serviceM)
+        public FormPutOnRefrigerator()
         {
             InitializeComponent();
-            this.serviceS = serviceS;
-            this.serviceC = serviceC;
-            this.serviceM = serviceM;
         }
 
         private void FormPutOnRefrigerator_Load(object sender, EventArgs e)
         {
             try
             {
-                List<ConstituentViewModels> listC = serviceC.GetList();
-                if (listC != null)
+                var responseC = APIAcquirente.GetRequest("api/Constituent/GetList");
+                if (responseC.Result.IsSuccessStatusCode)
                 {
-                    comboBoxConstituent.DisplayMember = "ConstituentName";
-                    comboBoxConstituent.ValueMember = "Id";
-                    comboBoxConstituent.DataSource = listC;
-                    comboBoxConstituent.SelectedItem = null;
+                    List<ConstituentViewModels> list = APIAcquirente.GetElement<List<ConstituentViewModels>>(responseC);
+                    if (list != null)
+                    {
+                        comboBoxConstituent.DisplayMember = "ConstituentName";
+                        comboBoxConstituent.ValueMember = "Id";
+                        comboBoxConstituent.DataSource = list;
+                        comboBoxConstituent.SelectedItem = null;
+                    }
+
                 }
-                List<RefrigeratorViewModels> listS = serviceS.GetList();
-                if (listS != null)
+
+                else
                 {
-                    comboBoxRefrigerator.DisplayMember = "RefrigeratorName";
-                    comboBoxRefrigerator.ValueMember = "Id";
-                    comboBoxRefrigerator.DataSource = listS;
-                    comboBoxRefrigerator.SelectedItem = null;
+                    throw new Exception(APIAcquirente.GetError(responseC));
+                }
+
+                var responseS = APIAcquirente.GetRequest("api/Refrigerator/GetList");
+                if (responseS.Result.IsSuccessStatusCode)
+                {
+                    List<RefrigeratorViewModels> list = APIAcquirente.GetElement<List<RefrigeratorViewModels>>(responseS);
+                    if (list != null)
+                    {
+                        comboBoxRefrigerator.DisplayMember = "RefrigeratorName";
+                        comboBoxRefrigerator.ValueMember = "Id";
+                        comboBoxRefrigerator.DataSource = list;
+                        comboBoxRefrigerator.SelectedItem = null;
+                    }
+                }
+                else
+                {
+                    throw new Exception(APIAcquirente.GetError(responseC));
                 }
             }
+
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -80,15 +89,22 @@ namespace MyBistroView
             }
             try
             {
-                serviceM.PutConstituentOnRefrigerator(new RefrigeratorConstituentBindingModels
+                var response = APIAcquirente.PostRequest("api/Main/PutConstituentOnRefrigerator", new RefrigeratorConstituentBindingModels
                 {
                     ConstituentId = Convert.ToInt32(comboBoxConstituent.SelectedValue),
                     RefrigeratorId = Convert.ToInt32(comboBoxRefrigerator.SelectedValue),
                     Count = Convert.ToInt32(textBoxCount.Text)
                 });
-                MessageBox.Show("Cохранение прошло уCпешно", "Cообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                DialogResult = DialogResult.OK;
-                Close();
+                if (response.Result.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Сохранение прошло успешно", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
+                else
+                {
+                    throw new Exception(APIAcquirente.GetError(response));
+                }
             }
             catch (Exception ex)
             {
