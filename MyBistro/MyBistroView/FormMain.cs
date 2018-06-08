@@ -7,8 +7,6 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using Unity;
 using Unity.Attributes;
-
-
 namespace MyBistroView
 {
     public partial class FormMain : Form
@@ -43,7 +41,6 @@ namespace MyBistroView
                         dataGridView.Columns[5].Visible = false;
                         dataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                     }
-
                 }
             }
             catch (Exception ex)
