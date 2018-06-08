@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConstituentSnack.cs" />
+    <Compile Include="MessageInfo.cs" />
     <Compile Include="Refrigerator.cs" />
     <Compile Include="RefrigeratorConstituent.cs" />
     <Compile Include="Snack.cs" />

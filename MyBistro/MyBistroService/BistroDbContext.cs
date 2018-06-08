@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace MyBistroService
 {
-    [Table("BistroDatabase")]
+   // [Table("BistroDatabase")]
     public class BistroDbContext : DbContext
     {
-        public BistroDbContext()
+        public BistroDbContext() : base("BistroDatabase")
         {
             //настройки конфигурации для entity
             Configuration.ProxyCreationEnabled = false;
@@ -34,6 +34,8 @@ namespace MyBistroService
         public virtual DbSet<Refrigerator> refrigerators { get; set; }
 
         public virtual DbSet<RefrigeratorConstituent> refrigeratorConstituents { get; set; }
+
+        public virtual DbSet<MessageInfo> MessageInfos { get; set; }
 
         public override int SaveChanges()
         {

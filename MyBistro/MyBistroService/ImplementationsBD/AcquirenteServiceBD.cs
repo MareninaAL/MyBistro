@@ -2,6 +2,7 @@
 using MyBistro.BindingModels;
 using MyBistro.ViewModels;
 using MyBistroService.Interfaces;
+using MyBistroService.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,8 @@ namespace MyBistroService.ImplementationsBD
                 .Select(rec => new АcquirenteViewModels
                 {
                     Id = rec.Id,
-                    АcquirenteFIO = rec.АcquirenteFIO
+                    АcquirenteFIO = rec.АcquirenteFIO,
+                    Mail = rec.Mail
                 })
                 .ToList();
             return result;
@@ -39,7 +41,18 @@ namespace MyBistroService.ImplementationsBD
                 return new АcquirenteViewModels
                 {
                     Id = element.Id,
-                    АcquirenteFIO = element.АcquirenteFIO
+                    АcquirenteFIO = element.АcquirenteFIO,
+                    Mail = element.Mail,
+                    Messages = context.MessageInfos
+                            .Where(recM => recM.АcquirenteId == element.Id)
+                            .Select(recM => new MessageInfoViewModel
+                            {
+                                MessageId = recM.MessageId,
+                                DateDelivery = recM.DateDelivery,
+                                Subject = recM.Subject,
+                                Body = recM.Body
+                            })
+                            .ToList()
                 };
             }
             throw new Exception("Элемент не найден");
@@ -54,6 +67,7 @@ namespace MyBistroService.ImplementationsBD
             }
             context.acquirentes.Add(new Аcquirente
             {
+                Mail = model.Mail,
                 АcquirenteFIO = model.АcquirenteFIO
             });
             context.SaveChanges();
@@ -72,6 +86,7 @@ namespace MyBistroService.ImplementationsBD
             {
                 throw new Exception("Элемент не найден");
             }
+            element.Mail = model.Mail;
             element.АcquirenteFIO = model.АcquirenteFIO;
             context.SaveChanges();
         }

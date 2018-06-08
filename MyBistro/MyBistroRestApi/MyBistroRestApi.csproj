@@ -130,6 +130,7 @@
     <Compile Include="Controllers\ConstituentController.cs" />
     <Compile Include="Controllers\CuocoController.cs" />
     <Compile Include="Controllers\MainController.cs" />
+    <Compile Include="Controllers\MessageInfoController.cs" />
     <Compile Include="Controllers\RefrigeratorController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\SnackController.cs" />
