@@ -17,22 +17,14 @@ namespace MyBistroView
 {
     public partial class FormTakeVitaAssassinaInWork : Form
     {
-      /*  [Dependency]
-        public new IUnityContainer Container { get; set; } */ 
 
         public int Id { set { id = value; } }
 
-        //private readonly ICuocoService serviceI;
-
-        //private readonly IMainService serviceM;
-
         private int? id;
          
-        public FormTakeVitaAssassinaInWork(/*ICuocoService serviceI, IMainService serviceM*/)
+        public FormTakeVitaAssassinaInWork()
         {
             InitializeComponent();
-            /*this.serviceI = serviceI;
-            this.serviceM = serviceM; */
         }
 
         private void FormTakeVitaAssassinaInWork_Load(object sender, EventArgs e)
@@ -44,7 +36,6 @@ namespace MyBistroView
                     MessageBox.Show("Не указан заказ", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     Close();
                 }
-                //List<CuocoViewModels> listI = serviceI.GetList();
                 var response = APIAcquirente.GetRequest("api/Cuoco/GetList");
                 if (response.Result.IsSuccessStatusCode)
                 {
@@ -77,14 +68,6 @@ namespace MyBistroView
             }
             try
             {
-                /*  serviceM.TakeVitaAssassinarInWork(new VitaAssassinaBindingModels
-                  {
-                      Id = id.Value,
-                      CuocoId = Convert.ToInt32(comboBoxImplementer.SelectedValue)
-                  });
-                  MessageBox.Show("Cохранение прошло уCпешно", "Cообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                  DialogResult = DialogResult.OK;
-                  Close(); */
                 var response = APIAcquirente.PostRequest("api/Main/TakeVitaAssassinarInWork", new VitaAssassinaBindingModels
                 {
                     Id = id.Value,

@@ -17,28 +17,16 @@ namespace MyBistroView
 {
     public partial class FormPutOnRefrigerator : Form
     {
-       /* [Dependency]
-        public new IUnityContainer Container { get; set; }
 
-        private readonly IRefrigeratorService serviceS;
-
-        private readonly IConstituentService serviceC;
-
-        private readonly IMainService serviceM; */
-
-        public FormPutOnRefrigerator(/*IRefrigeratorService serviceS, IConstituentService serviceC, IMainService serviceM */)
+        public FormPutOnRefrigerator()
         {
             InitializeComponent();
-           /* this.serviceS = serviceS;
-            this.serviceC = serviceC;
-            this.serviceM = serviceM; */
         }
 
         private void FormPutOnRefrigerator_Load(object sender, EventArgs e)
         {
             try
             {
-                // List<ConstituentViewModels> listC = serviceC.GetList();
                 var responseC = APIAcquirente.GetRequest("api/Constituent/GetList");
                 if (responseC.Result.IsSuccessStatusCode)
                 {
@@ -62,7 +50,6 @@ namespace MyBistroView
                 if (responseS.Result.IsSuccessStatusCode)
                 {
                     List<RefrigeratorViewModels> list = APIAcquirente.GetElement<List<RefrigeratorViewModels>>(responseS);
-                    // List<RefrigeratorViewModels> listS = serviceS.GetList();
                     if (list != null)
                     {
                         comboBoxRefrigerator.DisplayMember = "RefrigeratorName";
@@ -102,15 +89,6 @@ namespace MyBistroView
             }
             try
             {
-                /*serviceM.PutConstituentOnRefrigerator(new RefrigeratorConstituentBindingModels
-                {
-                    ConstituentId = Convert.ToInt32(comboBoxConstituent.SelectedValue),
-                    RefrigeratorId = Convert.ToInt32(comboBoxRefrigerator.SelectedValue),
-                    Count = Convert.ToInt32(textBoxCount.Text)
-                });
-                MessageBox.Show("Cохранение прошло уCпешно", "Cообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                DialogResult = DialogResult.OK;
-                Close(); */
                 var response = APIAcquirente.PostRequest("api/Main/PutConstituentOnRefrigerator", new RefrigeratorConstituentBindingModels
                 {
                     ConstituentId = Convert.ToInt32(comboBoxConstituent.SelectedValue),

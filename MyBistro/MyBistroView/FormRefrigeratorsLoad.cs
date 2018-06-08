@@ -17,13 +17,9 @@ namespace MyBistroView
 {
     public partial class FormRefrigeratorsLoad : Form
     {
-        /*[Dependency]
-        public new IUnityContainer Container { get; set; }
-        private readonly IReportService service; */
-        public FormRefrigeratorsLoad(/*IReportService service*/)
+        public FormRefrigeratorsLoad()
         {
             InitializeComponent();
-          //  this.service = service;
         }
 
         private void FormStocksLoad_Load(object sender, EventArgs e)
@@ -66,11 +62,6 @@ namespace MyBistroView
             {
                 try
                 {
-                    /* service.SaveRefregiratorsLoad(new ReportBindingModel
-                     {
-                         FileName = sfd.FileName
-                     });
-                     MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information); */
                     var response = APIAcquirente.PostRequest("api/Report/SaveRefregiratorsLoad", new ReportBindingModel
                     {
                         FileName = sfd.FileName

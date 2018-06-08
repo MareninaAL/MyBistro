@@ -18,19 +18,15 @@ namespace MyBistroView
 {
     public partial class FormCuoco : Form
     {
-       /* [Dependency]
-        public new IUnityContainer Container { get; set; } */ 
 
         public int Id { set { id = value; } }
-
-      //  private readonly ICuocoService service;
+        
 
         private int? id;
 
-        public FormCuoco(/*ICuocoService service*/)
+        public FormCuoco()
         {
             InitializeComponent();
-         //   this.service = service;
         }
 
         private void FormImplementer_Load(object sender, EventArgs e)
@@ -40,7 +36,6 @@ namespace MyBistroView
                 try
                 {
                     var response = APIAcquirente.GetRequest("api/Cuoco/Get/" + id.Value);
-                    // CuocoViewModels view = service.GetElement(id.Value);
                     if (response.Result.IsSuccessStatusCode)
                     {
                         var cuoco = APIAcquirente.GetElement<CuocoViewModels>(response);
@@ -71,7 +66,6 @@ namespace MyBistroView
                 if (id.HasValue)
                 {
                     response = APIAcquirente.PostRequest("api/Cuoco/UpdElement", new CuocoBindingModels
-                    //  service.UpdElement(new CuocoBindingModels
                     {
                         Id = id.Value,
                         CuocoFIO = textBoxFIO.Text
@@ -80,7 +74,6 @@ namespace MyBistroView
                 else
                 {
                     response = APIAcquirente.PostRequest("api/Cuoco/AddElement", new CuocoBindingModels
-                    //  service.AddElement(new CuocoBindingModels
                     {
                         CuocoFIO = textBoxFIO.Text
                     });

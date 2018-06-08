@@ -18,19 +18,15 @@ namespace MyBistroView
 {
     public partial class FormConstituent : Form
     {
-       /* [Dependency]
-        public new IUnityContainer Container { get; set; } */ 
 
         public int Id { set { id = value; } }
-
-        //private readonly IConstituentService service;
+        
 
         private int? id;
 
-        public FormConstituent(/*IConstituentService service*/ )
+        public FormConstituent()
         {
             InitializeComponent();
-           // this.service = service;
         }
 
         private void FormComponent_Load(object sender, EventArgs e)
@@ -39,7 +35,6 @@ namespace MyBistroView
             {
                 try
                 {
-                    // ConstituentViewModels view = service.GetElement(id.Value);
                     var response = APIAcquirente.GetRequest("api/Constituent/Get/" + id.Value);
                     if (response.Result.IsSuccessStatusCode)
                     {
@@ -71,7 +66,6 @@ namespace MyBistroView
                 if (id.HasValue)
                 {
                     response = APIAcquirente.PostRequest("api/Constituent/UpdElement", new ConstituentBindingModels
-                    //   service.UpdElement(new ConstituentBindingModels
                     {
                         Id = id.Value,
                         ConstituentName = textBoxName.Text
@@ -80,7 +74,6 @@ namespace MyBistroView
                 else
                 {
                     response = APIAcquirente.PostRequest("api/Constituent/AddElement", new ConstituentBindingModels
-                    //service.AddElement(new ConstituentBindingModels
                     {
                         ConstituentName = textBoxName.Text
                     }); 

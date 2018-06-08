@@ -17,21 +17,10 @@ namespace MyBistroView
 {
     public partial class FormCreateVitaAssassina : Form
     {
-       /* [Dependency]
-        public new IUnityContainer Container { get; set; }
 
-        private readonly IАcquirenteService serviceC;
-
-        private readonly ISnackService serviceP;
-
-        private readonly IMainService serviceM; */ 
-
-        public FormCreateVitaAssassina(/*IАcquirenteService serviceC, ISnackService serviceP, IMainService serviceM*/)
+        public FormCreateVitaAssassina()
         {
             InitializeComponent();
-          /*  this.serviceC = serviceC;
-            this.serviceP = serviceP;
-            this.serviceM = serviceM; */
         }
 
         private void FormCreateVitaAssassina_Load(object sender, EventArgs e)
@@ -39,7 +28,6 @@ namespace MyBistroView
             try
             {
                 var responseC = APIAcquirente.GetRequest("api/Аcquirente/GetList");
-                // List<АcquirenteViewModels> listC = serviceC.GetList();
                 if (responseC.Result.IsSuccessStatusCode)
                 {
                     List<АcquirenteViewModels> list = APIAcquirente.GetElement<List<АcquirenteViewModels>>(responseC);
@@ -60,7 +48,6 @@ namespace MyBistroView
                 if (responseP.Result.IsSuccessStatusCode)
                 {
                     List<SnackViewModels> list = APIAcquirente.GetElement<List<SnackViewModels>>(responseP);
-                    // List<SnackViewModels> listP = serviceP.GetList();
                     if (list != null)
                     {
                         comboBoxSnack.DisplayMember = "SnackName";
@@ -87,11 +74,7 @@ namespace MyBistroView
             {
                 try
                 {
-                    /* int id = Convert.ToInt32(comboBoxSnack.SelectedValue);
-                     SnackViewModels product = serviceP.GetElement(id);
-                     int count = Convert.ToInt32(textBoxCount.Text);
-                     textBoxSum.Text = (count * product.Price).ToString(); */
-                    int id = Convert.ToInt32(comboBoxProduct.SelectedValue);
+                    int id = Convert.ToInt32(comboBoxSnack.SelectedValue);
                     var responseP = APIAcquirente.GetRequest("api/Snack/Get/" + id);
                     if (responseP.Result.IsSuccessStatusCode)
                     {
@@ -140,16 +123,6 @@ namespace MyBistroView
             }
             try
             {
-                /* serviceM.CreateVitaAssassina(new VitaAssassinaBindingModels
-                 {
-                     АcquirenteId = Convert.ToInt32(comboBoxАcquirente.SelectedValue),
-                     SnackId = Convert.ToInt32(comboBoxSnack.SelectedValue),
-                     Count = Convert.ToInt32(textBoxCount.Text),
-                     Sum = Convert.ToInt32(textBoxSum.Text)
-                 });
-                 MessageBox.Show("Cохранение прошло уCпешно", "Cообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                 DialogResult = DialogResult.OK;
-                 Close(); */
                 var response = APIAcquirente.PostRequest("api/Main/CreateVitaAssassina", new VitaAssassinaBindingModels
                 {
                     АcquirenteId = Convert.ToInt32(comboBoxАcquirente.SelectedValue),

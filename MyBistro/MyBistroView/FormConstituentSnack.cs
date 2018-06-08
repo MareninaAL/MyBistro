@@ -16,19 +16,15 @@ namespace MyBistroView
 {
     public partial class FormConstituentSnack : Form
     {
-       /* [Dependency]
-        public new IUnityContainer Container { get; set; } */
         
         public ConstituentSnackViewModels Model { set { model = value; } get { return model; } }
-
-      //  private readonly IConstituentService service; 
+        
 
         private ConstituentSnackViewModels model;
 
-        public FormConstituentSnack(/*IConstituentService service*/)
+        public FormConstituentSnack()
         {
             InitializeComponent();
-          //  this.service = service;
         }
 
         private void FormConstituentSnack_Load(object sender, EventArgs e)
@@ -36,7 +32,6 @@ namespace MyBistroView
             try
             {
                 var response = APIAcquirente.GetRequest("api/Constituent/GetList");
-               // List<ConstituentViewModels> list = service.GetList();
                  if (response.Result.IsSuccessStatusCode)
                  {
                      comboBoxConstituent.DisplayMember = "ConstituentName";

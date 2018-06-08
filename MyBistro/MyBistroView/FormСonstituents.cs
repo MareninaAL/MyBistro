@@ -17,15 +17,10 @@ namespace MyBistroView
 {
     public partial class FormConstituents : Form
     {
-       /* [Dependency]
-        public new IUnityContainer Container { get; set; }
 
-        private readonly IConstituentService service; */ 
-
-        public FormConstituents(/*IConstituentService service */)
+        public FormConstituents()
         {
             InitializeComponent();
-           // this.service = service;
         }
 
         private void FormComponents_Load(object sender, EventArgs e)
@@ -37,7 +32,6 @@ namespace MyBistroView
         {
             try
             {
-                // List<ConstituentViewModels> list = service.GetList();
                 var response = APIAcquirente.GetRequest("api/Constituent/GetList");
                 if (response.Result.IsSuccessStatusCode)
                 {
@@ -62,7 +56,6 @@ namespace MyBistroView
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            //var form = Container.Resolve<FormConstituent>();
             var form = new FormConstituent();
             if (form.ShowDialog() == DialogResult.OK)
             {
@@ -74,7 +67,6 @@ namespace MyBistroView
         {
             if (dataGridView.SelectedRows.Count == 1)
             {
-                // var form = Container.Resolve<FormConstituent>();
                 var form = new FormConstituent();
                 form.Id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 if (form.ShowDialog() == DialogResult.OK)
@@ -93,7 +85,6 @@ namespace MyBistroView
                     int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                     try
                     {
-                        //  service.DelElement(id);
                         var response = APIAcquirente.PostRequest("api/Constituent/DelElement", new ConstituentBindingModels { Id = id });
                         if (!response.Result.IsSuccessStatusCode)
                         {

@@ -18,19 +18,15 @@ namespace MyBistroView
 {
     public partial class FormRefrigerator : Form
     {
-        /*[Dependency]
-        public new IUnityContainer Container { get; set; } */
 
         public int Id { set { id = value; } }
-
-    //    private readonly IRefrigeratorService service;
+        
 
         private int? id;
 
-        public FormRefrigerator(/*IRefrigeratorService service*/)
+        public FormRefrigerator()
         {
             InitializeComponent();
-          //  this.service = service;
         }
 
         private void FormRefrigerator_Load(object sender, EventArgs e)
@@ -40,7 +36,6 @@ namespace MyBistroView
                 try
                 {
                     var response = APIAcquirente.GetRequest("api/Refrigerator/Get/" + id.Value);
-                    //RefrigeratorViewModels view = service.GetElement(id.Value);
                     if (response.Result.IsSuccessStatusCode)
                     {
                         var stock = APIAcquirente.GetElement<RefrigeratorViewModels>(response);
@@ -75,11 +70,6 @@ namespace MyBistroView
                 Task<HttpResponseMessage> response;
                 if (id.HasValue)
                 {
-                    /*service.UpdElement(new RefrigeratorBindingModels
-                    {
-                        Id = id.Value,
-                        RefrigeratorName = textBoxName.Text
-                    }); */
                     response = APIAcquirente.PostRequest("api/Refrigerator/UpdElement", new RefrigeratorBindingModels
                     {
                         Id = id.Value,
@@ -88,10 +78,6 @@ namespace MyBistroView
                 }
                 else
                 {
-                    /*service.AddElement(new RefrigeratorBindingModels
-                    {
-                        RefrigeratorName = textBoxName.Text
-                    }); */
                     response = APIAcquirente.PostRequest("api/Refrigerator/AddElement", new RefrigeratorBindingModels
                     {
                         RefrigeratorName = textBoxName.Text

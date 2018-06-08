@@ -18,21 +18,17 @@ namespace MyBistroView
 {
     public partial class FormSnack : Form
     {
-      /*  [Dependency]
-        public new IUnityContainer Container { get; set; } */
 
         public int Id { set { id = value; } }
-
-       // private readonly ISnackService service;
+        
 
         private int? id;
 
         private List<ConstituentSnackViewModels> ConstituentSnack;
 
-        public FormSnack(/*ISnackService service*/)
+        public FormSnack()
         {
             InitializeComponent();
-           // this.service = service;
         }
 
         private void FormSnack_Load(object sender, EventArgs e)
@@ -42,7 +38,6 @@ namespace MyBistroView
                 try
                 {
                     var response = APIAcquirente.GetRequest("api/Snack/Get/" + id.Value);
-                   // SnackViewModels view = service.GetElement(id.Value);
                     if (response.Result.IsSuccessStatusCode)
                     {
                         var snack = APIAcquirente.GetElement<SnackViewModels>(response);
@@ -90,7 +85,6 @@ namespace MyBistroView
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            //  var form = Container.Resolve<FormConstituentSnack>();
 
             var form = new FormConstituentSnack();
             if (form.ShowDialog() == DialogResult.OK)
@@ -111,7 +105,6 @@ namespace MyBistroView
         {
             if (dataGridView.SelectedRows.Count == 1)
             {
-                //   var form = Container.Resolve<FormConstituentSnack>();
                 var form = new FormConstituentSnack();
                 form.Model = ConstituentSnack[dataGridView.SelectedRows[0].Cells[0].RowIndex];
                 if (form.ShowDialog() == DialogResult.OK)
@@ -181,7 +174,6 @@ namespace MyBistroView
                 if (id.HasValue)
                 {
                     response = APIAcquirente.PostRequest("api/Snack/UpdElement", new SnackBindingModels
-                    //service.UpdElement(new SnackBindingModels
                     {
                         Id = id.Value,
                         SnackName = textBoxName.Text,
@@ -192,7 +184,6 @@ namespace MyBistroView
                 else
                 {
                     response = APIAcquirente.PostRequest("api/Snack/AddElement", new SnackBindingModels
-                    //  service.AddElement(new SnackBindingModels
                     {
                           SnackName = textBoxName.Text,
                           Price = Convert.ToInt32(textBoxPrice.Text),
@@ -200,9 +191,6 @@ namespace MyBistroView
                       }); 
 
                 }
-                /*MessageBox.Show("Cохранение прошло уCпешно", "Cообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                DialogResult = DialogResult.OK;
-                Close();*/
 
                 if (response.Result.IsSuccessStatusCode)
                 {

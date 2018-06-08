@@ -17,15 +17,10 @@ namespace MyBistroView
 {
     public partial class FormАcquirentes : Form
     {
-        /*[Dependency]
-        public new IUnityContainer Container { get; set; }
 
-        private readonly IАcquirenteService service; */
-
-        public FormАcquirentes(/*IАcquirenteService service*/)
+        public FormАcquirentes()
         {
             InitializeComponent();
-          //  this.service = service;
         }
 
         private void FormClients_Load(object sender, EventArgs e)
@@ -37,7 +32,6 @@ namespace MyBistroView
         {
             try
             {
-                //  List<АcquirenteViewModels> list = service.GetList();
                 var response = APIAcquirente.GetRequest("api/Аcquirente/GetList");
                 if (response.Result.IsSuccessStatusCode)
                 {
@@ -62,7 +56,6 @@ namespace MyBistroView
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-          //  var form = Container.Resolve<FormАcquirente>();
           var form = new FormАcquirente();
             if (form.ShowDialog() == DialogResult.OK)
             {
@@ -74,7 +67,6 @@ namespace MyBistroView
         {
             if (dataGridView.SelectedRows.Count == 1)
             {
-                //    var form = Container.Resolve<FormАcquirente>();
                 var form = new FormАcquirente();
                 form.Id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 if (form.ShowDialog() == DialogResult.OK)
@@ -93,7 +85,6 @@ namespace MyBistroView
                     int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                     try
                     {
-                        // service.DelElement(id);
                         var response = APIAcquirente.PostRequest("api/Acquirente/DelElement", new АcquirenteBindingModels { Id = id });
                         if (!response.Result.IsSuccessStatusCode)
                         {

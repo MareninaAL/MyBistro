@@ -13,17 +13,10 @@ namespace MyBistroView
 {
     public partial class FormMain : Form
     {
-      /*  [Dependency]
-        public new IUnityContainer Container { get; set; }
 
-        private readonly IMainService service;
-        private readonly IReportService reportService; */
-
-        public FormMain(/*IMainService service, IReportService reportService*/)
+        public FormMain()
         {
             InitializeComponent();
-           /* this.service = service;
-            this.reportService = reportService; */
         }
 
         private void LoadData()
@@ -54,50 +47,42 @@ namespace MyBistroView
 
         private void клиентыToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // var form = Container.Resolve<FormАcquirentes>();
             var form = new FormАcquirentes();
             form.ShowDialog();
         }
 
         private void компонентыToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // var form = Container.Resolve<FormConstituents>();
-
             var form = new FormConstituents();
             form.ShowDialog();
         }
 
         private void изделияToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // var form = Container.Resolve<FormSnacks>();
             var form = new FormSnacks();
             form.ShowDialog();
         }
 
         private void CкладыToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //var form = Container.Resolve<FormRefrigerators>();
             var form = new FormRefrigerators();
             form.ShowDialog();
         }
 
         private void CотрудникиToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //var form = Container.Resolve<FormCuocos>();
             var form = new FormCuocos();
             form.ShowDialog();
         }
 
         private void пополнитьCкладToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // var form = Container.Resolve<FormPutOnRefrigerator>();
             var form = new FormPutOnRefrigerator();
             form.ShowDialog();
         }
 
         private void buttonCreateOrder_Click(object sender, EventArgs e)
         {
-            //   var form = Container.Resolve<FormCreateVitaAssassina>();
             var form = new FormCreateVitaAssassina();
             form.ShowDialog();
             LoadData();
@@ -107,8 +92,6 @@ namespace MyBistroView
         {
             if (dataGridView.SelectedRows.Count == 1)
             {
-                //  var form = Container.Resolve<FormTakeVitaAssassinaInWork>();
-                //  form.Id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 var form = new FormTakeVitaAssassinaInWork
                 {
                     Id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value)
@@ -125,8 +108,6 @@ namespace MyBistroView
                 int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 try
                 {
-                    // service.FinishVitaAssassina(id);
-                    // LoadData();
                     var response = APIAcquirente.PostRequest("api/Main/FinishVitaAssassina", new VitaAssassinaBindingModels
                     {
                         Id = id
@@ -154,8 +135,6 @@ namespace MyBistroView
                 int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
                 try
                 {
-                    // service.PayVitaAssassina(id);
-                    //  LoadData();
                     var response = APIAcquirente.PostRequest("api/Main/.PayVitaAssassina", new VitaAssassinaBindingModels
                     {
                         Id = id
@@ -196,11 +175,6 @@ namespace MyBistroView
             {
                 try
                 {
-                    /* reportService.SaveSnackPrice(new ReportBindingModel
-                     {
-                         FileName = sfd.FileName
-                     });
-                     MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information); */
                     var response = APIAcquirente.PostRequest("api/Report/SaveSnackPrice", new ReportBindingModel
                     {
                         FileName = sfd.FileName

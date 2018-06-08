@@ -18,14 +18,10 @@ namespace MyBistroView
 {
     public partial class FormAcquirenteVitaAssassinas : Form
     {
-       /* [Dependency]
-        public new IUnityContainer Container { get; set; }
-        private readonly IReportService service; */ 
 
-        public FormAcquirenteVitaAssassinas(/*IReportService service */)
+        public FormAcquirenteVitaAssassinas()
         {
             InitializeComponent();
-           // this.service = service;
         }
 
         private void FormAcquirenteVitaAssassinas_Load(object sender, EventArgs e)
@@ -50,14 +46,6 @@ namespace MyBistroView
             {
                 try
                 {
-                    /*service.SaveAcquirenteVitaAssassinas(new ReportBindingModel
-
-                    {
-                        FileName = sfd.FileName,
-                        DateFrom = dateTimePickerFrom.Value,
-                        DateTo = dateTimePickerTo.Value
-                    });
-                    MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information); */
                     var response = APIAcquirente.PostRequest("api/Report/SaveAcquirenteVitaAssassinas", new ReportBindingModel
                     {
                         FileName = sfd.FileName,
@@ -93,14 +81,6 @@ namespace MyBistroView
                 " по " + dateTimePickerTo.Value.ToShortDateString());
                 reportViewer.LocalReport.SetParameters(parameter);
 
-                /* var dataSource = service.GetAcquirenteVitaAssassinas(new ReportBindingModel
-                 {
-                     DateFrom = dateTimePickerFrom.Value,
-                     DateTo = dateTimePickerTo.Value
-                 });
-                 ReportDataSource source = new ReportDataSource("DataSetOrders", dataSource);
-                 reportViewer.LocalReport.DataSources.Add(source);
-                 reportViewer.RefreshReport(); */
                 var response = APIAcquirente.PostRequest("api/Report/GetAcquirenteVitaAssassinas", new ReportBindingModel
                 {
                     DateFrom = dateTimePickerFrom.Value,
