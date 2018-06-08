@@ -35,19 +35,25 @@ namespace MyBistroView
             {
                 try
                 {
-                    var response = APIAcquirente.GetRequest("api/Cuoco/Get/" + id.Value);
-                    if (response.Result.IsSuccessStatusCode)
-                    {
-                        var cuoco = APIAcquirente.GetElement<CuocoViewModels>(response);
-                        textBoxFIO.Text = cuoco.CuocoFIO;
-                    }
-                    else
-                    {
-                        throw new Exception(APIAcquirente.GetError(response));
-                    }
+                    /* var response = APIAcquirente.GetRequest("api/Cuoco/Get/" + id.Value);
+                     if (response.Result.IsSuccessStatusCode)
+                     {
+                         var cuoco = APIAcquirente.GetElement<CuocoViewModels>(response);
+                         textBoxFIO.Text = cuoco.CuocoFIO;
+                     }
+                     else
+                     {
+                         throw new Exception(APIAcquirente.GetError(response));
+                     } */
+                    var implementer = Task.Run(() => APIAcquirente.GetRequestData<CuocoViewModels>("api/Cuoco/Get/" + id.Value)).Result;
+                    textBoxFIO.Text = implementer.CuocoFIO;
                 }
                 catch (Exception ex)
                 {
+                    while (ex.InnerException != null)
+                    {
+                        ex = ex.InnerException;
+                    }
                     MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -60,7 +66,7 @@ namespace MyBistroView
                 MessageBox.Show("Заполните ФИО", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            try
+            /*try
             {
                 Task<HttpResponseMessage> response;
                 if (id.HasValue)
@@ -92,12 +98,44 @@ namespace MyBistroView
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            } */
+            string fio = textBoxFIO.Text;
+            Task task;
+            if (id.HasValue)
+            {
+                task = Task.Run(() => APIAcquirente.PostRequestData("api/Implementer/UpdElement", new CuocoBindingModels
+                {
+                    Id = id.Value,
+                    CuocoFIO = fio
+                }));
             }
+            else
+            {
+                task = Task.Run(() => APIAcquirente.PostRequestData("api/Implementer/AddElement", new CuocoBindingModels
+                {
+                    CuocoFIO = fio
+                }));
+            }
+
+            task.ContinueWith((prevTask) => MessageBox.Show("Сохранение прошло успешно. Обновите список", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information),
+                TaskContinuationOptions.OnlyOnRanToCompletion);
+            task.ContinueWith((prevTask) =>
+            {
+                var ex = (Exception)prevTask.Exception;
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                }
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }, TaskContinuationOptions.OnlyOnFaulted);
+
+            Close();
+
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.Cancel;
+         //   DialogResult = DialogResult.Cancel;
             Close();
         }
     }
