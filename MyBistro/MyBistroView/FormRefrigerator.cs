@@ -35,24 +35,21 @@ namespace MyBistroView
             {
                 try
                 {
-                    var response = APIAcquirente.GetRequest("api/Refrigerator/Get/" + id.Value);
-                    if (response.Result.IsSuccessStatusCode)
-                    {
-                        var stock = APIAcquirente.GetElement<RefrigeratorViewModels>(response);
-                        textBoxName.Text = stock.RefrigeratorName;
+                        var stock = Task.Run(() => APIAcquirente.GetRequestData<RefrigeratorViewModels>("api/Refrigerator/Get/" + id.Value)).Result;
+                    textBoxName.Text = stock.RefrigeratorName;
                         dataGridView.DataSource = stock.RefrigeratorConstituent;
                         dataGridView.Columns[0].Visible = false;
                         dataGridView.Columns[1].Visible = false;
                         dataGridView.Columns[2].Visible = false;
                         dataGridView.Columns[3].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                    }
-                    else
-                    {
-                        throw new Exception(APIAcquirente.GetError(response));
-                    }
+                
                 }
                 catch (Exception ex)
                 {
+                    while (ex.InnerException != null)
+                    {
+                        ex = ex.InnerException;
+                    }
                     MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -65,44 +62,41 @@ namespace MyBistroView
                 MessageBox.Show("Заполните название", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            try
+            string name = textBoxName.Text;
+            Task task;
+            if (id.HasValue)
             {
-                Task<HttpResponseMessage> response;
-                if (id.HasValue)
+                task = Task.Run(() => APIAcquirente.PostRequestData("api/Refrigerator/UpdElement", new RefrigeratorBindingModels
                 {
-                    response = APIAcquirente.PostRequest("api/Refrigerator/UpdElement", new RefrigeratorBindingModels
-                    {
-                        Id = id.Value,
-                        RefrigeratorName = textBoxName.Text
-                    });
-                }
-                else
-                {
-                    response = APIAcquirente.PostRequest("api/Refrigerator/AddElement", new RefrigeratorBindingModels
-                    {
-                        RefrigeratorName = textBoxName.Text
-                    });
-                }
-                if (response.Result.IsSuccessStatusCode)
-                {
-                    MessageBox.Show("Сохранение прошло успешно", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    DialogResult = DialogResult.OK;
-                    Close();
-                }
-                else
-                {
-                    throw new Exception(APIAcquirente.GetError(response));
-                }
+                    Id = id.Value,
+                    RefrigeratorName = name
+                }));
             }
-            catch (Exception ex)
+            else
             {
+                task = Task.Run(() => APIAcquirente.PostRequestData("api/Refrigerator/AddElement", new RefrigeratorBindingModels
+                {
+                    RefrigeratorName = name
+                }));
+            }
+
+            task.ContinueWith((prevTask) => MessageBox.Show("Сохранение прошло успешно. Обновите список", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information),
+                TaskContinuationOptions.OnlyOnRanToCompletion);
+            task.ContinueWith((prevTask) =>
+            {
+                var ex = (Exception)prevTask.Exception;
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                }
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            }, TaskContinuationOptions.OnlyOnFaulted);
+
+            Close();
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.Cancel;
             Close();
         }
     }

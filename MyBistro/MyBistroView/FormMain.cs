@@ -4,6 +4,7 @@ using MyBistroService.BindingModels;
 using MyBistroService.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Unity;
 using Unity.Attributes;
@@ -21,23 +22,24 @@ namespace MyBistroView
         {
             try
             {
-                var response = APIAcquirente.GetRequest("api/Main/GetList");
-                if (response.Result.IsSuccessStatusCode)
+                List<VitaAssassinaViewModels> list = Task.Run(() => APIAcquirente.GetRequestData<List<VitaAssassinaViewModels>>("api/Main/GetList")).Result;
+                if (list != null)
                 {
-                    List<VitaAssassinaViewModels> list = APIAcquirente.GetElement<List<VitaAssassinaViewModels>>(response);
-                    if (list != null)
-                    {
-                        dataGridView.DataSource = list;
-                        dataGridView.Columns[0].Visible = false;
-                        dataGridView.Columns[1].Visible = false;
-                        dataGridView.Columns[3].Visible = false;
-                        dataGridView.Columns[5].Visible = false;
-                        dataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                    }
+                    dataGridView.DataSource = list;
+                    dataGridView.Columns[0].Visible = false;
+                    dataGridView.Columns[1].Visible = false;
+                    dataGridView.Columns[3].Visible = false;
+                    dataGridView.Columns[5].Visible = false;
+                    dataGridView.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 }
+
             }
             catch (Exception ex)
             {
+                while (ex.InnerException != null)
+                {
+                    ex = ex.InnerException;
+                }
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -103,25 +105,23 @@ namespace MyBistroView
             if (dataGridView.SelectedRows.Count == 1)
             {
                 int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
-                try
+                
+                Task task = Task.Run(() => APIAcquirente.PostRequestData("api/Main/FinishVitaAssassina", new VitaAssassinaBindingModels
                 {
-                    var response = APIAcquirente.PostRequest("api/Main/FinishVitaAssassina", new VitaAssassinaBindingModels
-                    {
-                        Id = id
-                    });
-                    if (response.Result.IsSuccessStatusCode)
-                    {
-                        LoadData();
-                    }
-                    else
-                    {
-                        throw new Exception(APIAcquirente.GetError(response));
-                    }
-                }
-                catch (Exception ex)
+                    Id = id
+                }));
+                task.ContinueWith((prevTask) => MessageBox.Show("Статус заказа изменен. Обновите список", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information),
+                               TaskContinuationOptions.OnlyOnRanToCompletion);
+
+                task.ContinueWith((prevTask) =>
                 {
+                    var ex = (Exception)prevTask.Exception;
+                    while (ex.InnerException != null)
+                    {
+                        ex = ex.InnerException;
+                    }
                     MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                }, TaskContinuationOptions.OnlyOnFaulted);
             }
         }
 
@@ -130,25 +130,24 @@ namespace MyBistroView
             if (dataGridView.SelectedRows.Count == 1)
             {
                 int id = Convert.ToInt32(dataGridView.SelectedRows[0].Cells[0].Value);
-                try
+             
+                Task task = Task.Run(() => APIAcquirente.PostRequestData("api/Main/PayVitaAssassina", new VitaAssassinaBindingModels
                 {
-                    var response = APIAcquirente.PostRequest("api/Main/.PayVitaAssassina", new VitaAssassinaBindingModels
-                    {
-                        Id = id
-                    });
-                    if (response.Result.IsSuccessStatusCode)
-                    {
-                        LoadData();
-                    }
-                    else
-                    {
-                        throw new Exception(APIAcquirente.GetError(response));
-                    }
-                }
-                catch (Exception ex)
+                    Id = id
+                }));
+
+                task.ContinueWith((prevTask) => MessageBox.Show("Статус заказа изменен. Обновите список", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information),
+                TaskContinuationOptions.OnlyOnRanToCompletion);
+
+                task.ContinueWith((prevTask) =>
                 {
+                    var ex = (Exception)prevTask.Exception;
+                    while (ex.InnerException != null)
+                    {
+                        ex = ex.InnerException;
+                    }
                     MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                }, TaskContinuationOptions.OnlyOnFaulted);
             }
         }
 
@@ -170,25 +169,25 @@ namespace MyBistroView
             };
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                try
+              
+                string fileName = sfd.FileName;
+                Task task = Task.Run(() => APIAcquirente.PostRequestData("api/Report/SaveSnackPrice", new ReportBindingModel
                 {
-                    var response = APIAcquirente.PostRequest("api/Report/SaveSnackPrice", new ReportBindingModel
-                    {
-                        FileName = sfd.FileName
-                    });
-                    if (response.Result.IsSuccessStatusCode)
-                    {
-                        MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    else
-                    {
-                        throw new Exception(APIAcquirente.GetError(response));
-                    }
-                }
-                catch (Exception ex)
+                    FileName = fileName
+                }));
+
+                task.ContinueWith((prevTask) => MessageBox.Show("Выполнено", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information),
+                TaskContinuationOptions.OnlyOnRanToCompletion);
+
+                task.ContinueWith((prevTask) =>
                 {
+                    var ex = (Exception)prevTask.Exception;
+                    while (ex.InnerException != null)
+                    {
+                        ex = ex.InnerException;
+                    }
                     MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                }, TaskContinuationOptions.OnlyOnFaulted);
             }
         }
 
