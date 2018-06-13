@@ -15,6 +15,12 @@
                 <MenuItem Header="Компонент" HorizontalAlignment="Left" Height="25" Width="155" Click="MenuItem_Click_5" Margin="0,0,-7,0"/>
                 <MenuItem Header="Склад" HorizontalAlignment="Left" Height="25" Width="155" Click="MenuItem_Click_6" Margin="0,0,-7,0"/>
             </MenuItem>
+            <MenuItem Header="отчеты" Height="25" Width="220">
+                <MenuItem Header="загруженность складов" HorizontalAlignment="Left" Height="25" Width="220" Click="MenuItem_Click"/>
+                <MenuItem Header="заказы получателей" HorizontalAlignment="Left" Height="25" Width="220" Click="MenuItem_Click_7"/>
+                <MenuItem Header="прайс" HorizontalAlignment="Left" Height="25" Width="220" Click="MenuItem_Click_8" />
+            </MenuItem>
+
             <MenuItem Header="Пополнить склад" Height="25" Width="150" Click="MenuItem_Click_1"/>
         </Menu>
         <Button x:Name="buttonCreateVitaAssassina" Content="Создать заказ" HorizontalAlignment="Left" Margin="580,100,0,0" VerticalAlignment="Top" Width="130" Click="buttonCreateVitaAssassina_Click"/>
