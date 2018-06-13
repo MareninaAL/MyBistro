@@ -1,4 +1,6 @@
-﻿using MyBistro.ViewModels;
+﻿using Microsoft.Win32;
+using MyBistro.ViewModels;
+using MyBistroService.BindingModels;
 using MyBistroService.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -27,10 +29,12 @@ namespace BistroWeb
         public IUnityContainer Container { get; set; }
 
         private readonly IMainService service;
+        private readonly IReportService reportService;
 
-        public MainWindow(IMainService service)
+        public MainWindow(IMainService service, IReportService reportService)
         {
             InitializeComponent();
+            this.reportService = reportService;
             this.service = service;
         }
 
@@ -146,6 +150,61 @@ namespace BistroWeb
         private void buttonRef_Click(object sender, RoutedEventArgs e)
         {
             LoadData();
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Filter = "xls|*.xls|xlsx|*.xlsx"
+            };
+            if (sfd.ShowDialog() == true)
+            {
+                try
+                {
+                    reportService.SaveRefregiratorsLoad(new ReportBindingModel
+                    {
+                        FileName = sfd.FileName
+                    });
+                    MessageBox.Show("Выполнено", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void MenuItem_Click_7(object sender, RoutedEventArgs e)
+        { 
+            var form = Container.Resolve<AcquirenteVitaAssassinasWindow>();
+            form.ShowDialog();
+        }
+
+        private void MenuItem_Click_8(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Filter = "doc|*.doc|docx|*.docx"
+            };
+
+            if (sfd.ShowDialog() == true)
+            {
+
+                try
+                {
+
+                    reportService.SaveSnackPrice(new ReportBindingModel
+                    {
+                        FileName = sfd.FileName
+                    });
+                    System.Windows.MessageBox.Show("Выполнено", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
     }
 }

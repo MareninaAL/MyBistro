@@ -1,4 +1,5 @@
-﻿using MyBistroService.ImplementationsList;
+﻿using MyBistroService.ImplementationsBD;
+using MyBistroService.ImplementationsList;
 using MyBistroService.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,7 @@ namespace BistroWeb
             currentContainer.RegisterType<ISnackService, SnackServiceList>(new HierarchicalLifetimeManager());
             currentContainer.RegisterType<IRefrigeratorService, RefrigeratorServiceList>(new HierarchicalLifetimeManager());
             currentContainer.RegisterType<IMainService, MainServiceList>(new HierarchicalLifetimeManager());
-
+            currentContainer.RegisterType<IReportService, ReportServiceBD>(new HierarchicalLifetimeManager());
             return currentContainer;
         }
 
