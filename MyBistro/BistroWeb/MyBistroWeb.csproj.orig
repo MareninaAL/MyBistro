@@ -81,6 +81,12 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
+    <Compile Include="AcquirenteVitaAssassinasWindow.xaml.cs">
+      <DependentUpon>AcquirenteVitaAssassinasWindow.xaml</DependentUpon>
+    </Compile>
+=======
+>>>>>>> BistroWPF12
     <Compile Include="ConstituentSnackWindow.xaml.cs">
       <DependentUpon>ConstituentSnackWindow.xaml</DependentUpon>
     </Compile>
@@ -102,6 +108,13 @@
     <Compile Include="АcquirenteWindow.xaml.cs">
       <DependentUpon>АcquirenteWindow.xaml</DependentUpon>
     </Compile>
+<<<<<<< HEAD
+    <Page Include="AcquirenteVitaAssassinasWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+=======
+>>>>>>> BistroWPF12
     <Page Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -214,7 +227,13 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+<<<<<<< HEAD
+    <EmbeddedResource Include="Report1.rdlc" />
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\MyBistroService.ViewModels.AcquirenteVitaAssassinaModel.datasource" />
+=======
+    <None Include="packages.config" />
+>>>>>>> BistroWPF12
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
