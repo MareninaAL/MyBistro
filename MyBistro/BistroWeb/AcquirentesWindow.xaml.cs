@@ -1,4 +1,5 @@
-﻿using MyBistro.ViewModels;
+﻿using MyBistro.BindingModels;
+using MyBistro.ViewModels;
 using MyBistroService.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -23,14 +24,14 @@ namespace BistroWeb
     /// </summary>
     public partial class AcquirentesWindow : Window
     {
-        [Dependency]
+       /* [Dependency]
         public new IUnityContainer Container { get; set; }
 
-        private readonly IАcquirenteService service;
-        public AcquirentesWindow(IАcquirenteService service)
+        private readonly IАcquirenteService service; */ 
+        public AcquirentesWindow(/*IАcquirenteService service*/)
         {
             InitializeComponent();
-            this.service = service;
+          //  this.service = service;
             Loaded += Clients_Load;
         }
 
@@ -43,12 +44,21 @@ namespace BistroWeb
         {
             try
             {
-                List<АcquirenteViewModels> list = service.GetList();
-                if (list != null)
+                // List<АcquirenteViewModels> list = service.GetList();
+                var response = APIClient.GetRequest("api/Аcquirente/GetList");
+                if (response.Result.IsSuccessStatusCode)
                 {
-                    dataGridAcquirente.ItemsSource = list;
-                    dataGridAcquirente.Columns[0].Visibility = Visibility.Hidden;
-                    dataGridAcquirente.Columns[1].Width = dataGridAcquirente.Width - 9;
+                    List<АcquirenteViewModels> list = APIClient.GetElement<List<АcquirenteViewModels>>(response);
+                    if (list != null)
+                    {
+                        dataGridAcquirente.ItemsSource = list;
+                        dataGridAcquirente.Columns[0].Visibility = Visibility.Hidden;
+                        dataGridAcquirente.Columns[1].Width = dataGridAcquirente.Width - 9;
+                    }
+                }
+                else
+                {
+                    throw new Exception(APIClient.GetError(response));
                 }
             }
             catch (Exception ex)
@@ -59,7 +69,8 @@ namespace BistroWeb
 
         private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
-            var form = Container.Resolve<АcquirenteWindow>();
+            // var form = Container.Resolve<АcquirenteWindow>();
+            var form = new АcquirenteWindow();
             if (form.ShowDialog() == true)
             {
                 LoadData();
@@ -70,7 +81,8 @@ namespace BistroWeb
         {
             if (dataGridAcquirente.SelectedItem != null )
             {
-                var form = Container.Resolve<АcquirenteWindow>();
+                //var form = Container.Resolve<АcquirenteWindow>();
+                var form = new АcquirenteWindow();
                 form.Id = ((АcquirenteViewModels)dataGridAcquirente.SelectedItem).Id;
                 if (form.ShowDialog() == true)
                 {
@@ -93,7 +105,12 @@ namespace BistroWeb
                     int id = ((АcquirenteViewModels)dataGridAcquirente.SelectedItem).Id;
                     try
                     {
-                        service.DelElement(id);
+                        //  service.DelElement(id);
+                        var response = APIClient.PostRequest("api/Аcquirente/DelElement", new АcquirenteBindingModels { Id = id });
+                        if (!response.Result.IsSuccessStatusCode)
+                        {
+                            throw new Exception(APIClient.GetError(response));
+                        }
                     }
                     catch (Exception ex)
                     {

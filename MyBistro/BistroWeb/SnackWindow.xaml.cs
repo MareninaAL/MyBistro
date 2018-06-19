@@ -4,6 +4,7 @@ using MyBistroService.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,20 +25,20 @@ namespace BistroWeb
     /// </summary>
     public partial class SnackWindow : Window
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
+       /* [Dependency]
+        public new IUnityContainer Container { get; set; } */
 
         public int Id { set { id = value; } }
 
-        private readonly ISnackService service;
+     //   private readonly ISnackService service;
 
         private int? id;
 
         private List<ConstituentSnackViewModels> ConstituentSnack;
-        public SnackWindow(ISnackService service)
+        public SnackWindow(/*ISnackService service*/)
         {
             InitializeComponent();
-            this.service = service;
+         //   this.service = service;
             Loaded += Snack_Load;
         }
 
@@ -47,13 +48,19 @@ namespace BistroWeb
             {
                 try
                 {
-                    SnackViewModels view = service.GetElement(id.Value);
-                    if (view != null)
+                    //  SnackViewModels view = service.GetElement(id.Value);
+                    var response = APIClient.GetRequest("api/Snack/Get/" + id.Value);
+                    if (response.Result.IsSuccessStatusCode)
                     {
-                        textBoxSnackName.Text = view.SnackName;
-                        textBoxSnackPrice.Text = view.Price.ToString();
-                        ConstituentSnack = view.ConstituentSnack;
+                        var snack = APIClient.GetElement<SnackViewModels>(response);
+                        textBoxSnackName.Text = snack.SnackName;
+                        textBoxSnackPrice.Text = snack.Price.ToString();
+                        ConstituentSnack = snack.ConstituentSnack;
                         LoadData();
+                    }
+                    else
+                    {
+                        throw new Exception(APIClient.GetError(response));
                     }
                 }
                 catch (Exception ex)
@@ -89,7 +96,8 @@ namespace BistroWeb
 
         private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
-            var form = Container.Resolve<ConstituentSnackWindow>();
+            //  var form = Container.Resolve<ConstituentSnackWindow>();
+            var form = new ConstituentSnackWindow();
             if (form.ShowDialog() == true)
             {
                 if (form.Model != null)
@@ -108,7 +116,8 @@ namespace BistroWeb
         {
             if (dataGridConstituents.SelectedItem != null)
             {
-                var form = Container.Resolve<ConstituentSnackWindow>();
+                //  var form = Container.Resolve<ConstituentSnackWindow>();
+                var form = new ConstituentSnackWindow();
                 form.Model = ConstituentSnack[dataGridConstituents.SelectedIndex];
                 if (form.ShowDialog() == true)
                 {
@@ -173,9 +182,11 @@ namespace BistroWeb
                         Count = ConstituentSnack[i].Count
                     });
                 }
+                Task<HttpResponseMessage> response;
                 if (id.HasValue)
                 {
-                    service.UpdElement(new SnackBindingModels
+                    //service.UpdElement(new SnackBindingModels
+                    response = APIClient.PostRequest("api/Snack/UpdElement", new SnackBindingModels
                     {
                         Id = id.Value,
                         SnackName = textBoxSnackName.Text,
@@ -185,16 +196,24 @@ namespace BistroWeb
                 }
                 else
                 {
-                    service.AddElement(new SnackBindingModels
+                    // service.AddElement(new SnackBindingModels
+                    response = APIClient.PostRequest("api/Snack/AddElement", new SnackBindingModels
                     {
                         SnackName = textBoxSnackName.Text,
                         Price = Convert.ToInt32(textBoxSnackPrice.Text),
                         ConstituentSnack = productComponentBM
                     });
                 }
-                MessageBox.Show("Cохранение прошло уCпешно", "Cообщение", MessageBoxButton.OK);
+                if (response.Result.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Cохранение прошло уCпешно", "Cообщение", MessageBoxButton.OK);
                 DialogResult = true;
                 Close();
+            }
+                else
+                {
+                    throw new Exception(APIClient.GetError(response));
+                }
             }
             catch (Exception ex)
             {

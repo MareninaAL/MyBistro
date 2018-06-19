@@ -4,6 +4,7 @@ using MyBistroService.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,18 +25,18 @@ namespace BistroWeb
     /// </summary>
     public partial class ConstituentWindow : Window
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
+      /*  [Dependency]
+        public new IUnityContainer Container { get; set; } */ 
 
         public int Id { set { id = value; } }
 
-        private readonly IConstituentService service;
+        // private readonly IConstituentService service;
 
         private int? id;
-        public ConstituentWindow(IConstituentService service)
+        public ConstituentWindow(/*IConstituentService service*/ )
         {
             InitializeComponent();
-            this.service = service;
+          //  this.service = service;
             Loaded += Constituent_Load;
         }
 
@@ -45,10 +46,16 @@ namespace BistroWeb
             {
                 try
                 {
-                    ConstituentViewModels view = service.GetElement(id.Value);
-                    if (view != null)
+                    //  ConstituentViewModels view = service.GetElement(id.Value);
+                    var response = APIClient.GetRequest("api/Constituent/Get/" + id.Value);
+                    if (response.Result.IsSuccessStatusCode)
                     {
-                        textBoxConstituentName.Text = view.ConstituentName;
+                        var constituent = APIClient.GetElement<ConstituentViewModels>(response);
+                        textBoxConstituentName.Text = constituent.ConstituentName;
+                    }
+                    else
+                    {
+                        throw new Exception(APIClient.GetError(response));
                     }
                 }
                 catch (Exception ex)
@@ -68,9 +75,11 @@ namespace BistroWeb
             }
             try
             {
+                Task<HttpResponseMessage> response;
                 if (id.HasValue)
                 {
-                    service.UpdElement(new ConstituentBindingModels
+                    //  service.UpdElement(new ConstituentBindingModels
+                    response = APIClient.PostRequest("api/Constituent/UpdElement", new ConstituentBindingModels
                     {
                         Id = id.Value,
                         ConstituentName = textBoxConstituentName.Text
@@ -78,14 +87,22 @@ namespace BistroWeb
                 }
                 else
                 {
-                    service.AddElement(new ConstituentBindingModels
+                    // service.AddElement(new ConstituentBindingModels
+                    response = APIClient.PostRequest("api/Constituent/AddElement", new ConstituentBindingModels
                     {
                         ConstituentName = textBoxConstituentName.Text
                     });
                 }
-                MessageBox.Show("Cохранение прошло уCпешно", "Cообщение", MessageBoxButton.OK);
-                DialogResult = true;
-                Close();
+                if (response.Result.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Cохранение прошло уCпешно", "Cообщение", MessageBoxButton.OK);
+                    DialogResult = true;
+                    Close();
+                }
+                else
+                {
+                    throw new Exception(APIClient.GetError(response));
+                }
             }
             catch (Exception ex)
             {

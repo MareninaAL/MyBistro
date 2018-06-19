@@ -4,6 +4,7 @@ using MyBistroService.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,19 +25,19 @@ namespace BistroWeb
     /// </summary>
     public partial class RefrigeratorWindow : Window
     {
-        [Dependency]
-        public IUnityContainer Container { get; set; }
+      /*  [Dependency]
+        public IUnityContainer Container { get; set; } */
 
         public int Id { set { id = value; } }
 
-        private readonly IRefrigeratorService service;
+      //  private readonly IRefrigeratorService service;
 
         private int? id;
 
-        public RefrigeratorWindow(IRefrigeratorService service)
+        public RefrigeratorWindow(/*IRefrigeratorService service*/)
         {
             InitializeComponent();
-            this.service = service;
+          //  this.service = service;
             Loaded += Refrigerator_Load;
         }
 
@@ -46,15 +47,21 @@ namespace BistroWeb
             {
                 try
                 {
-                    RefrigeratorViewModels view = service.GetElement(id.Value);
-                    if (view != null)
+                    //  RefrigeratorViewModels view = service.GetElement(id.Value);
+                    var response = APIClient.GetRequest("api/Refrigerator/Get/" + id.Value);
+                    if (response.Result.IsSuccessStatusCode)
                     {
-                        textBoxRefrigeratorName.Text = view.RefrigeratorName;
-                        dataGridConstituents.ItemsSource = view.RefrigeratorConstituent;
+                        var refrigerator = APIClient.GetElement<RefrigeratorViewModels>(response);
+                        textBoxRefrigeratorName.Text = refrigerator.RefrigeratorName;
+                        dataGridConstituents.ItemsSource = refrigerator.RefrigeratorConstituent;
                         dataGridConstituents.Columns[0].Visibility = Visibility.Hidden;
                         dataGridConstituents.Columns[1].Visibility = Visibility.Hidden;
                         dataGridConstituents.Columns[2].Visibility = Visibility.Hidden;
                         dataGridConstituents.Columns[3].Width = dataGridConstituents.Width - 8;
+                    }
+                    else
+                    {
+                        throw new Exception(APIClient.GetError(response));
                     }
                 }
                 catch (Exception ex)
@@ -73,9 +80,11 @@ namespace BistroWeb
             }
             try
             {
+                Task<HttpResponseMessage> response;
                 if (id.HasValue)
                 {
-                    service.UpdElement(new RefrigeratorBindingModels
+                    //  service.UpdElement(new RefrigeratorBindingModels
+                    response = APIClient.PostRequest("api/Refrigerator/UpdElement", new RefrigeratorBindingModels
                     {
                         Id = id.Value,
                         RefrigeratorName = textBoxRefrigeratorName.Text
@@ -83,7 +92,8 @@ namespace BistroWeb
                 }
                 else
                 {
-                    service.AddElement(new RefrigeratorBindingModels
+                    // service.AddElement(new RefrigeratorBindingModels
+                    response = APIClient.PostRequest("api/Refrigerator/AddElement", new RefrigeratorBindingModels
                     {
                         RefrigeratorName = textBoxRefrigeratorName.Text
                     });
