@@ -24,14 +24,9 @@ namespace BistroWeb
     /// </summary>
     public partial class AcquirentesWindow : Window
     {
-       /* [Dependency]
-        public new IUnityContainer Container { get; set; }
-
-        private readonly IАcquirenteService service; */ 
-        public AcquirentesWindow(/*IАcquirenteService service*/)
+        public AcquirentesWindow()
         {
             InitializeComponent();
-          //  this.service = service;
             Loaded += Clients_Load;
         }
 
@@ -44,7 +39,6 @@ namespace BistroWeb
         {
             try
             {
-                // List<АcquirenteViewModels> list = service.GetList();
                 var response = APIClient.GetRequest("api/Аcquirente/GetList");
                 if (response.Result.IsSuccessStatusCode)
                 {
@@ -69,7 +63,6 @@ namespace BistroWeb
 
         private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
-            // var form = Container.Resolve<АcquirenteWindow>();
             var form = new АcquirenteWindow();
             if (form.ShowDialog() == true)
             {
@@ -81,7 +74,6 @@ namespace BistroWeb
         {
             if (dataGridAcquirente.SelectedItem != null )
             {
-                //var form = Container.Resolve<АcquirenteWindow>();
                 var form = new АcquirenteWindow();
                 form.Id = ((АcquirenteViewModels)dataGridAcquirente.SelectedItem).Id;
                 if (form.ShowDialog() == true)
@@ -105,7 +97,6 @@ namespace BistroWeb
                     int id = ((АcquirenteViewModels)dataGridAcquirente.SelectedItem).Id;
                     try
                     {
-                        //  service.DelElement(id);
                         var response = APIClient.PostRequest("api/Аcquirente/DelElement", new АcquirenteBindingModels { Id = id });
                         if (!response.Result.IsSuccessStatusCode)
                         {

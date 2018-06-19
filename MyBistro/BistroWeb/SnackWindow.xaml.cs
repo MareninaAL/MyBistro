@@ -25,20 +25,15 @@ namespace BistroWeb
     /// </summary>
     public partial class SnackWindow : Window
     {
-       /* [Dependency]
-        public new IUnityContainer Container { get; set; } */
 
         public int Id { set { id = value; } }
-
-     //   private readonly ISnackService service;
 
         private int? id;
 
         private List<ConstituentSnackViewModels> ConstituentSnack;
-        public SnackWindow(/*ISnackService service*/)
+        public SnackWindow()
         {
             InitializeComponent();
-         //   this.service = service;
             Loaded += Snack_Load;
         }
 
@@ -48,7 +43,6 @@ namespace BistroWeb
             {
                 try
                 {
-                    //  SnackViewModels view = service.GetElement(id.Value);
                     var response = APIClient.GetRequest("api/Snack/Get/" + id.Value);
                     if (response.Result.IsSuccessStatusCode)
                     {
@@ -96,7 +90,6 @@ namespace BistroWeb
 
         private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
-            //  var form = Container.Resolve<ConstituentSnackWindow>();
             var form = new ConstituentSnackWindow();
             if (form.ShowDialog() == true)
             {
@@ -116,7 +109,6 @@ namespace BistroWeb
         {
             if (dataGridConstituents.SelectedItem != null)
             {
-                //  var form = Container.Resolve<ConstituentSnackWindow>();
                 var form = new ConstituentSnackWindow();
                 form.Model = ConstituentSnack[dataGridConstituents.SelectedIndex];
                 if (form.ShowDialog() == true)
@@ -185,7 +177,6 @@ namespace BistroWeb
                 Task<HttpResponseMessage> response;
                 if (id.HasValue)
                 {
-                    //service.UpdElement(new SnackBindingModels
                     response = APIClient.PostRequest("api/Snack/UpdElement", new SnackBindingModels
                     {
                         Id = id.Value,
@@ -196,7 +187,6 @@ namespace BistroWeb
                 }
                 else
                 {
-                    // service.AddElement(new SnackBindingModels
                     response = APIClient.PostRequest("api/Snack/AddElement", new SnackBindingModels
                     {
                         SnackName = textBoxSnackName.Text,

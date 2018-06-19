@@ -24,22 +24,14 @@ namespace BistroWeb
     /// </summary>
     public partial class TakeVitaAssassinaInWorkWindow : Window
     {
-      /*  [Dependency]
-        public IUnityContainer Container { get; set; }*/
 
         public int Id { set { id = value; } }
 
-     //   private readonly ICuocoService serviceС;
-
-       /// private readonly IMainService serviceM;
-
         private int? id;
 
-        public TakeVitaAssassinaInWorkWindow(/*ICuocoService serviceС, IMainService serviceM*/)
+        public TakeVitaAssassinaInWorkWindow()
         {
             InitializeComponent();
-           // this.serviceС = serviceС;
-            //this.serviceM = serviceM;
             Loaded += TakeVitaAssassinaInWorkWindow_Load;
         }
 
@@ -52,7 +44,6 @@ namespace BistroWeb
                     MessageBox.Show("Не указан заказ", "Ошибка", MessageBoxButton.OK);
                     Close();
                 }
-                // List<CuocoViewModels> listС = serviceС.GetList();
                 var response = APIClient.GetRequest("api/Cuoco/GetList");
                 if (response.Result.IsSuccessStatusCode)
                 {
@@ -85,7 +76,6 @@ namespace BistroWeb
             }
             try
             {
-                //  serviceM.TakeVitaAssassinarInWork(new VitaAssassinaBindingModels
                 var response = APIClient.PostRequest("api/Main/TakeVitaAssassinarInWork", new VitaAssassinaBindingModels
                 {
                     Id = id.Value,

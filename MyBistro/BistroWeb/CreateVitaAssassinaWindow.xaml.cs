@@ -24,20 +24,9 @@ namespace BistroWeb
     /// </summary>
     public partial class CreateVitaAssassinaWindow : Window
     {
-       /* [Dependency]
-        public IUnityContainer Container { get; set; }
-
-        private readonly IАcquirenteService serviceA;
-
-        private readonly ISnackService serviceS;
-
-        private readonly IMainService serviceM; */ 
-        public CreateVitaAssassinaWindow(/*IАcquirenteService serviceA, ISnackService serviceS, IMainService serviceM*/)
+        public CreateVitaAssassinaWindow()
         {
             InitializeComponent();
-          /*  this.serviceA = serviceA;
-            this.serviceS = serviceS;
-            this.serviceM = serviceM; */
             Loaded += CreateVitaAssassinaWindow_Load;
             comboBoxSnack.SelectionChanged += comboBoxSnack_SelectionChanged;
             comboBoxSnack.SelectionChanged += new SelectionChangedEventHandler(comboBoxSnack_SelectionChanged);
@@ -50,9 +39,6 @@ namespace BistroWeb
                 try
                 {
                     int id = Convert.ToInt32(comboBoxSnack.SelectedValue);
-                    //  SnackViewModels snack = serviceS.GetElement(id);
-                    //  int count = Convert.ToInt32(textBoxCount.Text);
-                    //  textBoxSumm.Text = (count * snack.Price).ToString();
                     var responseP = APIClient.GetRequest("api/Snack/Get/" + id);
                     if (responseP.Result.IsSuccessStatusCode)
                     {
@@ -76,7 +62,6 @@ namespace BistroWeb
         {
             try
             {
-                //  List<АcquirenteViewModels> listA = serviceA.GetList();
                 var responseC = APIClient.GetRequest("api/Аcquirente/GetList");
                 if (responseC.Result.IsSuccessStatusCode)
                 {
@@ -93,7 +78,6 @@ namespace BistroWeb
                 {
                     throw new Exception(APIClient.GetError(responseC));
                 }
-                //  List<SnackViewModels> listS = serviceS.GetList();
                 var responseP = APIClient.GetRequest("api/Snack/GetList");
                 if (responseP.Result.IsSuccessStatusCode)
                 {
@@ -135,7 +119,6 @@ namespace BistroWeb
             }
             try
             {
-                //serviceM.CreateVitaAssassina(new VitaAssassinaBindingModels
                 var response = APIClient.PostRequest("api/Main/CreateVitaAssassina", new VitaAssassinaBindingModels
                 {
                     АcquirenteId = Convert.ToInt32(comboBoxAcquirente.SelectedValue),

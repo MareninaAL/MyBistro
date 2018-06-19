@@ -23,20 +23,9 @@ namespace BistroWeb
     /// </summary>
     public partial class PutOnRefrigerator : Window
     {
-       /* [Unity.Attributes.Dependency]
-        public new IUnityContainer Container { get; set; }
-
-        private readonly IRefrigeratorService serviceS;
-
-        private readonly IConstituentService serviceC;
-
-        private readonly IMainService serviceM; */
-        public PutOnRefrigerator(/*IRefrigeratorService serviceS, IConstituentService serviceC, IMainService serviceM*/)
+        public PutOnRefrigerator()
         {
             InitializeComponent();
-          /*  this.serviceS = serviceS;
-            this.serviceC = serviceC;
-            this.serviceM = serviceM; */
             Loaded += FormPutOnRefrigerator_Load;
         }
 
@@ -44,7 +33,6 @@ namespace BistroWeb
         {
             try
             {
-                // List<ConstituentViewModels> listC = serviceC.GetList();
                 var responseC = APIClient.GetRequest("api/Constituent/GetList");
                 if (responseC.Result.IsSuccessStatusCode)
                 {
@@ -61,7 +49,6 @@ namespace BistroWeb
                 {
                     throw new Exception(APIClient.GetError(responseC));
                 }
-                //  List<RefrigeratorViewModels> listS = serviceS.GetList();
                 var responseS = APIClient.GetRequest("api/Refrigerator/GetList");
                 if (responseS.Result.IsSuccessStatusCode)
                 {
@@ -104,7 +91,6 @@ namespace BistroWeb
             }
             try
             {
-                //  serviceM.PutConstituentOnRefrigerator(new RefrigeratorConstituentBindingModels
                 var response = APIClient.PostRequest("api/Main/PutConstituentOnRefrigerator", new RefrigeratorConstituentBindingModels
                 {
                     ConstituentId = Convert.ToInt32(comboBoxConstituent.SelectedValue),

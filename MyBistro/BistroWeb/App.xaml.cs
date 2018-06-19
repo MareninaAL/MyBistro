@@ -23,25 +23,11 @@ namespace BistroWeb
         [STAThread]
         static void Main()
         {
-            //   var container = BuildUnityContainer();
             APIClient.Connect();
             var application = new App();
             application.Run(new MainWindow());
-            //   application.Run(container.Resolve<MainWindow>());
         }
-
-       /* public static IUnityContainer BuildUnityContainer()
-        {
-            var currentContainer = new UnityContainer();
-            currentContainer.RegisterType<IАcquirenteService, АcquirenteServiceList>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<IConstituentService, ConstituentServiceList>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<ICuocoService, CuocoServiceList>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<ISnackService, SnackServiceList>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<IRefrigeratorService, RefrigeratorServiceList>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<IMainService, MainServiceList>(new HierarchicalLifetimeManager());
-            currentContainer.RegisterType<IReportService, ReportServiceBD>(new HierarchicalLifetimeManager());
-            return currentContainer;
-        } */
+        
 
     }
 }

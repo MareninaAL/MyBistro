@@ -25,24 +25,16 @@ namespace BistroWeb
     /// </summary>
     public partial class MainWindow : Window
     {
-      /*  [Unity.Attributes.Dependency]
-        public IUnityContainer Container { get; set; }
 
-        private readonly IMainService service;
-        private readonly IReportService reportService; */
-
-        public MainWindow(/*IMainService service, IReportService reportService*/)
+        public MainWindow()
         {
             InitializeComponent();
-           /* this.reportService = reportService;
-            this.service = service; */
         }
 
         private void LoadData()
         {
             try
             {
-                //  List<VitaAssassinaViewModels> list = service.GetList();
                 var response = APIClient.GetRequest("api/Main/GetList");
                 if (response.Result.IsSuccessStatusCode)
                 {
@@ -71,49 +63,42 @@ namespace BistroWeb
 
         private void MenuItem_Click_1(object sender, RoutedEventArgs e)
         {
-            // var form = Container.Resolve<PutOnRefrigerator>();
             var form = new PutOnRefrigerator();
             form.ShowDialog();
         }
 
         private void MenuItem_Click_2(object sender, RoutedEventArgs e)
         {
-          //  var form = Container.Resolve<AcquirentesWindow>();
             var form = new AcquirentesWindow();
             form.ShowDialog();
         }
 
         private void MenuItem_Click_3(object sender, RoutedEventArgs e)
         {
-         //   var form = Container.Resolve<CuocosWindow>();
             var form = new CuocosWindow();
             form.ShowDialog();
         }
 
         private void MenuItem_Click_4(object sender, RoutedEventArgs e)
         {
-            //var form = Container.Resolve<SnacksWindow>();
             var form = new SnacksWindow();
             form.ShowDialog();
         }
 
         private void MenuItem_Click_5(object sender, RoutedEventArgs e)
         {
-          //  var form = Container.Resolve<ConstituentsWindow>();
             var form = new ConstituentsWindow();
             form.ShowDialog();
         }
 
         private void MenuItem_Click_6(object sender, RoutedEventArgs e)
         {
-            //  var form = Container.Resolve<RefrigeratorsWindow>();
             var form = new RefrigeratorsWindow();
             form.ShowDialog();
         }
 
         private void buttonCreateVitaAssassina_Click(object sender, RoutedEventArgs e)
         {
-            //var form = Container.Resolve<CreateVitaAssassinaWindow>();
             var form = new CreateVitaAssassinaWindow();
             form.ShowDialog();
             LoadData();
@@ -123,7 +108,6 @@ namespace BistroWeb
         {
             if (dataGrid.SelectedItem != null)
             {
-                //  var form = Container.Resolve<TakeVitaAssassinaInWorkWindow>();
                 var form = new TakeVitaAssassinaInWorkWindow();
                 form.Id = ((VitaAssassinaViewModels)dataGrid.SelectedItem).Id;
                 form.ShowDialog();
@@ -138,8 +122,6 @@ namespace BistroWeb
                 int id = ((VitaAssassinaViewModels)dataGrid.SelectedItem).Id;
                 try
                 {
-                    //service.FinishVitaAssassina(id);
-                    //  LoadData();
                     var response = APIClient.PostRequest("api/Main/FinishVitaAssassina", new VitaAssassinaViewModels
                     {
                         Id = id
@@ -167,8 +149,6 @@ namespace BistroWeb
                 int id = ((VitaAssassinaViewModels)dataGrid.SelectedItem).Id;
                 try
                 {
-                    //service.PayVitaAssassina(id);
-                    // LoadData();
                     var response = APIClient.PostRequest("api/Main/PayVitaAssassina", new VitaAssassinaViewModels
                     {
                         Id = id
@@ -204,7 +184,6 @@ namespace BistroWeb
             {
                 try
                 {
-                    // reportService.SaveRefregiratorsLoad(new ReportBindingModel
                     var response = APIClient.PostRequest("api/Report/SaveRefregiratorsLoad", new ReportBindingModel
                     {
                         FileName = sfd.FileName
@@ -227,7 +206,6 @@ namespace BistroWeb
 
         private void MenuItem_Click_7(object sender, RoutedEventArgs e)
         { 
-           // var form = Container.Resolve<AcquirenteVitaAssassinasWindow>();
             var form = new AcquirenteVitaAssassinasWindow();
             form.ShowDialog();
         }
@@ -244,8 +222,7 @@ namespace BistroWeb
 
                 try
                 {
-
-                    //   reportService.SaveSnackPrice(new ReportBindingModel
+                    
                     var response = APIClient.PostRequest("api/Report/SaveSnackPrice", new ReportBindingModel
                     {
                         FileName = sfd.FileName

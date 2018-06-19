@@ -25,19 +25,14 @@ namespace BistroWeb
     /// </summary>
     public partial class RefrigeratorWindow : Window
     {
-      /*  [Dependency]
-        public IUnityContainer Container { get; set; } */
 
         public int Id { set { id = value; } }
 
-      //  private readonly IRefrigeratorService service;
-
         private int? id;
 
-        public RefrigeratorWindow(/*IRefrigeratorService service*/)
+        public RefrigeratorWindow()
         {
             InitializeComponent();
-          //  this.service = service;
             Loaded += Refrigerator_Load;
         }
 
@@ -47,7 +42,6 @@ namespace BistroWeb
             {
                 try
                 {
-                    //  RefrigeratorViewModels view = service.GetElement(id.Value);
                     var response = APIClient.GetRequest("api/Refrigerator/Get/" + id.Value);
                     if (response.Result.IsSuccessStatusCode)
                     {
@@ -83,7 +77,6 @@ namespace BistroWeb
                 Task<HttpResponseMessage> response;
                 if (id.HasValue)
                 {
-                    //  service.UpdElement(new RefrigeratorBindingModels
                     response = APIClient.PostRequest("api/Refrigerator/UpdElement", new RefrigeratorBindingModels
                     {
                         Id = id.Value,
@@ -92,7 +85,6 @@ namespace BistroWeb
                 }
                 else
                 {
-                    // service.AddElement(new RefrigeratorBindingModels
                     response = APIClient.PostRequest("api/Refrigerator/AddElement", new RefrigeratorBindingModels
                     {
                         RefrigeratorName = textBoxRefrigeratorName.Text

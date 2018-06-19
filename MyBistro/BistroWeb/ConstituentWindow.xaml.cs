@@ -25,18 +25,13 @@ namespace BistroWeb
     /// </summary>
     public partial class ConstituentWindow : Window
     {
-      /*  [Dependency]
-        public new IUnityContainer Container { get; set; } */ 
 
         public int Id { set { id = value; } }
 
-        // private readonly IConstituentService service;
-
         private int? id;
-        public ConstituentWindow(/*IConstituentService service*/ )
+        public ConstituentWindow()
         {
             InitializeComponent();
-          //  this.service = service;
             Loaded += Constituent_Load;
         }
 
@@ -46,7 +41,6 @@ namespace BistroWeb
             {
                 try
                 {
-                    //  ConstituentViewModels view = service.GetElement(id.Value);
                     var response = APIClient.GetRequest("api/Constituent/Get/" + id.Value);
                     if (response.Result.IsSuccessStatusCode)
                     {
@@ -78,7 +72,6 @@ namespace BistroWeb
                 Task<HttpResponseMessage> response;
                 if (id.HasValue)
                 {
-                    //  service.UpdElement(new ConstituentBindingModels
                     response = APIClient.PostRequest("api/Constituent/UpdElement", new ConstituentBindingModels
                     {
                         Id = id.Value,
@@ -87,7 +80,6 @@ namespace BistroWeb
                 }
                 else
                 {
-                    // service.AddElement(new ConstituentBindingModels
                     response = APIClient.PostRequest("api/Constituent/AddElement", new ConstituentBindingModels
                     {
                         ConstituentName = textBoxConstituentName.Text

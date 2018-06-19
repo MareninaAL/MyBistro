@@ -27,15 +27,10 @@ namespace BistroWeb
     /// </summary>
     public partial class AcquirenteVitaAssassinasWindow : Window
     {
-       /* [Dependency]
-        public IUnityContainer Container { get; set; }
 
-        private readonly IReportService service; */
-
-        public AcquirenteVitaAssassinasWindow(/*IReportService service*/)
+        public AcquirenteVitaAssassinasWindow()
         {
             InitializeComponent();
-            //this.service = service;
         }
 
         private void buttonMake_Click_1(object sender, RoutedEventArgs e)
@@ -53,8 +48,7 @@ namespace BistroWeb
                                             " по " + Convert.ToDateTime(dateTimePickerTo.SelectedDate).ToString("dd-MM"));
                 reportViewer.LocalReport.SetParameters(parameter);
 
-
-                // var dataSource = service.GetAcquirenteVitaAssassinas(new ReportBindingModel
+                
                 var response = APIClient.PostRequest("api/Report/GetAcquirenteVitaAssassinas", new ReportBindingModel
                 {
                     DateFrom = dateTimePickerFrom.SelectedDate,
@@ -96,7 +90,6 @@ namespace BistroWeb
             {
                 try
                 {
-                    //  service.SaveAcquirenteVitaAssassinas(new ReportBindingModel
                     var response = APIClient.PostRequest("api/Report/SaveAcquirenteVitaAssassinas", new ReportBindingModel
                     {
                         FileName = sfd.FileName,

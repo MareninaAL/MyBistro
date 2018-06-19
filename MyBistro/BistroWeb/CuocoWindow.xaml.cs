@@ -25,18 +25,13 @@ namespace BistroWeb
     /// </summary>
     public partial class CuocoWindow : Window
     {
-       /* [Dependency]
-        public new IUnityContainer Container { get; set; } */
 
         public int Id { set { id = value; } }
 
-      //  private readonly ICuocoService service;
-
         private int? id;
-        public CuocoWindow(/*ICuocoService service*/)
+        public CuocoWindow()
         {
             InitializeComponent();
-         //   this.service = service;
             Loaded += Cuoco_Load;
         }
 
@@ -46,7 +41,6 @@ namespace BistroWeb
             {
                 try
                 {
-                    // CuocoViewModels view = service.GetElement(id.Value);
                     var response = APIClient.GetRequest("api/Cuoco/Get/" + id.Value);
                     if (response.Result.IsSuccessStatusCode)
                     {
@@ -77,7 +71,6 @@ namespace BistroWeb
                 Task<HttpResponseMessage> response;
                 if (id.HasValue)
                 {
-                    //  service.UpdElement(new CuocoBindingModels
                     response = APIClient.PostRequest("api/Cuoco/UpdElement", new CuocoBindingModels
                     {
                         Id = id.Value,
@@ -86,7 +79,6 @@ namespace BistroWeb
                 }
                 else
                 {
-                    //  service.AddElement(new CuocoBindingModels
                     response = APIClient.PostRequest("api/Cuoco/AddElement", new CuocoBindingModels
                     {
                         CuocoFIO = textBoxCuocoFIO.Text

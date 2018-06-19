@@ -25,18 +25,14 @@ namespace BistroWeb
     /// </summary>
     public partial class АcquirenteWindow : Window
     {
-     /*   [Dependency]
-        public new IUnityContainer Container { get; set; } */
 
         public int Id { set { id = value; } }
-
-    //    private readonly IАcquirenteService service;
+        
 
         private int? id;
-        public АcquirenteWindow(/*IАcquirenteService service*/)
+        public АcquirenteWindow()
         {
             InitializeComponent();
-         //   this.service = service;
             Loaded += Аcquirente_Load;
         }
 
@@ -46,7 +42,6 @@ namespace BistroWeb
             {
                 try
                 {
-                    // АcquirenteViewModels view = service.GetElement(id.Value);
                     var response = APIClient.GetRequest("api/Аcquirente/Get/" + id.Value);
                     if (response.Result.IsSuccessStatusCode)
                     {
@@ -78,7 +73,6 @@ namespace BistroWeb
                 Task<HttpResponseMessage> response;
                 if (id.HasValue)
                 {
-                    //  service.UpdElement(new АcquirenteBindingModels
                     response = APIClient.PostRequest("api/Аcquirente/UpdElement", new АcquirenteBindingModels
                     {
                         Id = id.Value,
@@ -87,7 +81,6 @@ namespace BistroWeb
                 }
                 else
                 {
-                    //  service.AddElement(new АcquirenteBindingModels
                     response = APIClient.PostRequest("api/Аcquirente/AddElement", new АcquirenteBindingModels
                     {
                         АcquirenteFIO = textBoxАcquirenteFIO.Text

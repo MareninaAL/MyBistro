@@ -24,14 +24,9 @@ namespace BistroWeb
     /// </summary>
     public partial class RefrigeratorsWindow : Window
     {
-        /*[Dependency]
-        public IUnityContainer Container { get; set; }
-
-        private readonly IRefrigeratorService service;*/
-        public RefrigeratorsWindow(/*IRefrigeratorService service*/)
+        public RefrigeratorsWindow()
         {
             InitializeComponent();
-         //   this.service = service;
             Loaded += Refrigerator_Load;
         }
 
@@ -44,7 +39,6 @@ namespace BistroWeb
         {
             try
             {
-                //  List<RefrigeratorViewModels> list = service.GetList();
                 var response = APIClient.GetRequest("api/Refrigerator/GetList");
                 if (response.Result.IsSuccessStatusCode)
                 {
@@ -69,7 +63,6 @@ namespace BistroWeb
 
         private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
-            // var form = Container.Resolve<RefrigeratorWindow>();
             var form = new RefrigeratorWindow();
             if (form.ShowDialog() == true)
             {
@@ -86,7 +79,6 @@ namespace BistroWeb
         {
             if (dataGridRefrigerator.SelectedItem != null)
             {
-                //var form = Container.Resolve<RefrigeratorWindow>();
                 var form = new RefrigeratorWindow();
                 form.Id = ((RefrigeratorViewModels)dataGridRefrigerator.SelectedItem).Id;
                 if (form.ShowDialog() == true)
@@ -105,7 +97,6 @@ namespace BistroWeb
                     int id = ((RefrigeratorViewModels)dataGridRefrigerator.SelectedItem).Id;
                     try
                     {
-                        // service.DelElement(id);
                         var response = APIClient.PostRequest("api/Refrigerator/DelElement", new RefrigeratorBindingModels { Id = id });
                         if (!response.Result.IsSuccessStatusCode)
                         {

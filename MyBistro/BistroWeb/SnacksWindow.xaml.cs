@@ -24,14 +24,9 @@ namespace BistroWeb
     /// </summary>
     public partial class SnacksWindow : Window
     {
-    /*    [Dependency]
-        public IUnityContainer Container { get; set; }
-
-        private readonly ISnackService service; */
-        public SnacksWindow(/*ISnackService service*/)
+        public SnacksWindow()
         {
             InitializeComponent();
-         //   this.service = service;
             Loaded += Snacks_Load;
         }
 
@@ -44,7 +39,6 @@ namespace BistroWeb
         {
             try
             {
-                // List<SnackViewModels> list = service.GetList();
                 var response = APIClient.GetRequest("api/Snack/GetList");
                 if (response.Result.IsSuccessStatusCode)
                 {
@@ -74,7 +68,6 @@ namespace BistroWeb
 
         private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
-            // var form = Container.Resolve<SnackWindow>();
             var form = new SnackWindow();
             if (form.ShowDialog() == true)
             {
@@ -86,7 +79,6 @@ namespace BistroWeb
         {
             if (dataGridSnack.SelectedItem != null)
             {
-                // var form = Container.Resolve<SnackWindow>();
                 var form = new SnackWindow();
                 form.Id = ((SnackViewModels)dataGridSnack.SelectedItem).Id;
                 if (form.ShowDialog() == true)
@@ -105,7 +97,6 @@ namespace BistroWeb
                     int id = ((SnackViewModels)dataGridSnack.SelectedItem).Id;
                     try
                     {
-                        //  service.DelElement(id);
                         var response = APIClient.PostRequest("api/Snack/DelElement", new SnackBindingModels { Id = id });
                         if (!response.Result.IsSuccessStatusCode)
                         {

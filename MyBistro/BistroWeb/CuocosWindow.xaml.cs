@@ -24,14 +24,9 @@ namespace BistroWeb
     /// </summary>
     public partial class CuocosWindow : Window
     {
-      /*  [Dependency]
-        public IUnityContainer Container { get; set; }
-
-        private readonly ICuocoService service; */ 
-        public CuocosWindow(/*ICuocoService service*/)
+        public CuocosWindow()
         {
             InitializeComponent();
-       //     this.service = service;
             Loaded += Cuoco_Load; 
         }
 
@@ -44,7 +39,6 @@ namespace BistroWeb
         {
             try
             {
-                // List<CuocoViewModels> list = service.GetList();
                 var response = APIClient.GetRequest("api/Cuoco/GetList");
                 if (response.Result.IsSuccessStatusCode)
                 {
@@ -70,7 +64,6 @@ namespace BistroWeb
 
         private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
-            // var form = Container.Resolve<CuocoWindow>();
             var form = new CuocoWindow();
             if (form.ShowDialog() == true)
             {
@@ -87,7 +80,6 @@ namespace BistroWeb
         {
             if (dataGridCuoco.SelectedItem != null)
             {
-                // var form = Container.Resolve<CuocoWindow>();
                 var form = new CuocoWindow();
                 form.Id = ((CuocoViewModels)dataGridCuoco.SelectedItem).Id;
                 if (form.ShowDialog() == true)
@@ -106,7 +98,6 @@ namespace BistroWeb
                     int id = ((CuocoViewModels)dataGridCuoco.SelectedItem).Id;
                     try
                     {
-                        //   service.DelElement(id);
                         var response = APIClient.PostRequest("api/Cuoco/DelElement", new CuocoBindingModels { Id = id });
                         if (!response.Result.IsSuccessStatusCode)
                         {
