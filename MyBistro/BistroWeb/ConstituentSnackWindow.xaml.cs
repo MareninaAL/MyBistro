@@ -23,32 +23,31 @@ namespace BistroWeb
     /// </summary>
     public partial class ConstituentSnackWindow : Window
     {
-        [Dependency]
-        public IUnityContainer Container { get; set; }
-
-        private readonly IConstituentService service;
-
+         
         public ConstituentSnackViewModels Model { set { model = value; } get { return model; } }
 
         private ConstituentSnackViewModels model;
-        public ConstituentSnackWindow(IConstituentService service)
+        public ConstituentSnackWindow()
         {
             InitializeComponent();
             Loaded += ConstituentSnack_Load;
-            this.service = service;
         }
 
         private void ConstituentSnack_Load(object sender, EventArgs e)
         {
             try
             {
-                List<ConstituentViewModels> list = service.GetList();
-                if (list != null)
+                var response = APIClient.GetRequest("api/Constituent/GetList");
+                if (response.Result.IsSuccessStatusCode)
                 {
                     comboBoxConstituent.DisplayMemberPath = "ConstituentName";
                     comboBoxConstituent.SelectedValuePath = "Id";
-                    comboBoxConstituent.ItemsSource = list;
+                    comboBoxConstituent.ItemsSource = APIClient.GetElement<List<ConstituentViewModels>>(response);
                     comboBoxConstituent.SelectedItem = null;
+                }
+                else
+                {
+                    throw new Exception(APIClient.GetError(response));
                 }
             }
             catch (Exception ex)

@@ -18,6 +18,7 @@ using MyBistroService.BindingModels;
 using MyBistroService.Interfaces;
 using Unity;
 using Unity.Attributes;
+using MyBistroService.ViewModels;
 
 namespace BistroWeb
 {
@@ -26,15 +27,10 @@ namespace BistroWeb
     /// </summary>
     public partial class AcquirenteVitaAssassinasWindow : Window
     {
-        [Dependency]
-        public IUnityContainer Container { get; set; }
 
-        private readonly IReportService service;
-
-        public AcquirenteVitaAssassinasWindow(IReportService service)
+        public AcquirenteVitaAssassinasWindow()
         {
             InitializeComponent();
-            this.service = service;
         }
 
         private void buttonMake_Click_1(object sender, RoutedEventArgs e)
@@ -52,15 +48,22 @@ namespace BistroWeb
                                             " по " + Convert.ToDateTime(dateTimePickerTo.SelectedDate).ToString("dd-MM"));
                 reportViewer.LocalReport.SetParameters(parameter);
 
-
-                var dataSource = service.GetAcquirenteVitaAssassinas(new ReportBindingModel
+                
+                var response = APIClient.PostRequest("api/Report/GetAcquirenteVitaAssassinas", new ReportBindingModel
                 {
                     DateFrom = dateTimePickerFrom.SelectedDate,
                     DateTo = dateTimePickerTo.SelectedDate
                 });
-                ReportDataSource source = new ReportDataSource("DataSet1", dataSource);
-                reportViewer.LocalReport.DataSources.Add(source);
-
+                if (response.Result.IsSuccessStatusCode)
+                {
+                    var dataSource = APIClient.GetElement<List<AcquirenteVitaAssassinaModel>>(response);
+                    ReportDataSource source = new ReportDataSource("DataSet1", dataSource);
+                    reportViewer.LocalReport.DataSources.Add(source);
+                }
+                else
+                {
+                    throw new Exception(APIClient.GetError(response));
+                }
 
 
 
@@ -87,13 +90,20 @@ namespace BistroWeb
             {
                 try
                 {
-                    service.SaveAcquirenteVitaAssassinas(new ReportBindingModel
+                    var response = APIClient.PostRequest("api/Report/SaveAcquirenteVitaAssassinas", new ReportBindingModel
                     {
                         FileName = sfd.FileName,
                         DateFrom = dateTimePickerFrom.SelectedDate,
                         DateTo = dateTimePickerTo.SelectedDate
                     });
-                    MessageBox.Show("Выполнено", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                    if (response.Result.IsSuccessStatusCode)
+                    {
+                        MessageBox.Show("Выполнено", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                     }else
+                    {
+                        throw new Exception(APIClient.GetError(response));
+
+                    }
                 }
                 catch (Exception ex)
                 {

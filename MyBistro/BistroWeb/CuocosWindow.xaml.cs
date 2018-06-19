@@ -1,4 +1,5 @@
-﻿using MyBistro.ViewModels;
+﻿using MyBistro.BindingModels;
+using MyBistro.ViewModels;
 using MyBistroService.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -23,14 +24,9 @@ namespace BistroWeb
     /// </summary>
     public partial class CuocosWindow : Window
     {
-        [Dependency]
-        public IUnityContainer Container { get; set; }
-
-        private readonly ICuocoService service;
-        public CuocosWindow(ICuocoService service)
+        public CuocosWindow()
         {
             InitializeComponent();
-            this.service = service;
             Loaded += Cuoco_Load; 
         }
 
@@ -43,12 +39,20 @@ namespace BistroWeb
         {
             try
             {
-                List<CuocoViewModels> list = service.GetList();
-                if (list != null)
+                var response = APIClient.GetRequest("api/Cuoco/GetList");
+                if (response.Result.IsSuccessStatusCode)
                 {
-                    dataGridCuoco.ItemsSource = list;
-                    dataGridCuoco.Columns[0].Visibility = Visibility.Hidden;
-                    dataGridCuoco.Columns[1].Width = dataGridCuoco.Width - 8;
+                    List<CuocoViewModels> list = APIClient.GetElement<List<CuocoViewModels>>(response);
+                    if (list != null)
+                    {
+                        dataGridCuoco.ItemsSource = list;
+                        dataGridCuoco.Columns[0].Visibility = Visibility.Hidden;
+                        dataGridCuoco.Columns[1].Width = dataGridCuoco.Width - 8;
+                    }
+                }
+                else
+                {
+                    throw new Exception(APIClient.GetError(response));
                 }
             }
             catch (Exception ex)
@@ -60,7 +64,7 @@ namespace BistroWeb
 
         private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
-            var form = Container.Resolve<CuocoWindow>();
+            var form = new CuocoWindow();
             if (form.ShowDialog() == true)
             {
                 LoadData();
@@ -76,7 +80,7 @@ namespace BistroWeb
         {
             if (dataGridCuoco.SelectedItem != null)
             {
-                var form = Container.Resolve<CuocoWindow>();
+                var form = new CuocoWindow();
                 form.Id = ((CuocoViewModels)dataGridCuoco.SelectedItem).Id;
                 if (form.ShowDialog() == true)
                 {
@@ -94,7 +98,11 @@ namespace BistroWeb
                     int id = ((CuocoViewModels)dataGridCuoco.SelectedItem).Id;
                     try
                     {
-                        service.DelElement(id);
+                        var response = APIClient.PostRequest("api/Cuoco/DelElement", new CuocoBindingModels { Id = id });
+                        if (!response.Result.IsSuccessStatusCode)
+                        {
+                            throw new Exception(APIClient.GetError(response));
+                        }
                     }
                     catch (Exception ex)
                     {

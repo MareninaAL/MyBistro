@@ -1,4 +1,5 @@
-﻿using MyBistro.ViewModels;
+﻿using MyBistro.BindingModels;
+using MyBistro.ViewModels;
 using MyBistroService.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -23,14 +24,9 @@ namespace BistroWeb
     /// </summary>
     public partial class SnacksWindow : Window
     {
-        [Dependency]
-        public IUnityContainer Container { get; set; }
-
-        private readonly ISnackService service;
-        public SnacksWindow(ISnackService service)
+        public SnacksWindow()
         {
             InitializeComponent();
-            this.service = service;
             Loaded += Snacks_Load;
         }
 
@@ -43,12 +39,20 @@ namespace BistroWeb
         {
             try
             {
-                List<SnackViewModels> list = service.GetList();
-                if (list != null)
+                var response = APIClient.GetRequest("api/Snack/GetList");
+                if (response.Result.IsSuccessStatusCode)
                 {
-                    dataGridSnack.ItemsSource = list;
-                    dataGridSnack.Columns[0].Visibility = Visibility.Hidden;
-                    dataGridSnack.Columns[1].Width = DataGridLength.Auto;
+                    List<SnackViewModels> list = APIClient.GetElement<List<SnackViewModels>>(response);
+                    if (list != null)
+                    {
+                        dataGridSnack.ItemsSource = list;
+                        dataGridSnack.Columns[0].Visibility = Visibility.Hidden;
+                        dataGridSnack.Columns[1].Width = DataGridLength.Auto;
+                    }
+                }
+                else
+                {
+                    throw new Exception(APIClient.GetError(response));
                 }
             }
             catch (Exception ex)
@@ -64,7 +68,7 @@ namespace BistroWeb
 
         private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
-            var form = Container.Resolve<SnackWindow>();
+            var form = new SnackWindow();
             if (form.ShowDialog() == true)
             {
                 LoadData();
@@ -75,7 +79,7 @@ namespace BistroWeb
         {
             if (dataGridSnack.SelectedItem != null)
             {
-                var form = Container.Resolve<SnackWindow>();
+                var form = new SnackWindow();
                 form.Id = ((SnackViewModels)dataGridSnack.SelectedItem).Id;
                 if (form.ShowDialog() == true)
                 {
@@ -93,7 +97,11 @@ namespace BistroWeb
                     int id = ((SnackViewModels)dataGridSnack.SelectedItem).Id;
                     try
                     {
-                        service.DelElement(id);
+                        var response = APIClient.PostRequest("api/Snack/DelElement", new SnackBindingModels { Id = id });
+                        if (!response.Result.IsSuccessStatusCode)
+                        {
+                            throw new Exception(APIClient.GetError(response));
+                        }
                     }
                     catch (Exception ex)
                     {

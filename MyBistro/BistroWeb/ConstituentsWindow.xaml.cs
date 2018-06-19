@@ -1,4 +1,5 @@
-﻿using MyBistro.ViewModels;
+﻿using MyBistro.BindingModels;
+using MyBistro.ViewModels;
 using MyBistroService.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -23,14 +24,9 @@ namespace BistroWeb
     /// </summary>
     public partial class ConstituentsWindow : Window
     {
-        [Dependency]
-        public IUnityContainer Container { get; set; }
-
-        private readonly IConstituentService service;
-        public ConstituentsWindow(IConstituentService service)
+        public ConstituentsWindow()
         {
             InitializeComponent();
-            this.service = service;
             Loaded += Constituents_Load;
         }
         private void Constituents_Load(object sender, EventArgs e)
@@ -42,12 +38,20 @@ namespace BistroWeb
         {
             try
             {
-                List<ConstituentViewModels> list = service.GetList();
-                if (list != null)
+                var response = APIClient.GetRequest("api/Constituent/GetList");
+                if (response.Result.IsSuccessStatusCode)
                 {
-                    dataGridConstituent.ItemsSource = list;
-                    dataGridConstituent.Columns[0].Visibility = Visibility.Hidden;
-                    dataGridConstituent.Columns[1].Width = dataGridConstituent.Width - 8;
+                    List<ConstituentViewModels> list = APIClient.GetElement<List<ConstituentViewModels>>(response);
+                    if (list != null)
+                    {
+                        dataGridConstituent.ItemsSource = list;
+                        dataGridConstituent.Columns[0].Visibility = Visibility.Hidden;
+                        dataGridConstituent.Columns[1].Width = dataGridConstituent.Width - 8;
+                    }
+                }
+                else
+                {
+                    throw new Exception(APIClient.GetError(response));
                 }
             }
             catch (Exception ex)
@@ -58,7 +62,7 @@ namespace BistroWeb
 
         private void buttonAdd_Click(object sender, RoutedEventArgs e)
         {
-            var form = Container.Resolve<ConstituentWindow>();
+            var form = new ConstituentWindow();
             if (form.ShowDialog() == true)
             {
                 LoadData();
@@ -74,7 +78,7 @@ namespace BistroWeb
         {
             if (dataGridConstituent.SelectedItem != null)
             {
-                var form = Container.Resolve<ConstituentWindow>();
+                var form = new ConstituentWindow();
                 form.Id = ((ConstituentViewModels)dataGridConstituent.SelectedItem).Id;
                 if (form.ShowDialog() == true)
                 {
@@ -92,7 +96,11 @@ namespace BistroWeb
                     int id = ((ConstituentViewModels)dataGridConstituent.SelectedItem).Id;
                     try
                     {
-                        service.DelElement(id);
+                        var response = APIClient.PostRequest("api/Constituent/DelElement", new ConstituentBindingModels { Id = id });
+                        if (!response.Result.IsSuccessStatusCode)
+                        {
+                            throw new Exception(APIClient.GetError(response));
+                        }
                     }
                     catch (Exception ex)
                     {

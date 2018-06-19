@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,21 +18,17 @@ namespace MyBistroView
 {
     public partial class FormSnack : Form
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
 
         public int Id { set { id = value; } }
-
-        private readonly ISnackService service;
+        
 
         private int? id;
 
         private List<ConstituentSnackViewModels> ConstituentSnack;
 
-        public FormSnack(ISnackService service)
+        public FormSnack()
         {
             InitializeComponent();
-            this.service = service;
         }
 
         private void FormSnack_Load(object sender, EventArgs e)
@@ -40,13 +37,19 @@ namespace MyBistroView
             {
                 try
                 {
-                    SnackViewModels view = service.GetElement(id.Value);
-                    if (view != null)
+                    var response = APIAcquirente.GetRequest("api/Snack/Get/" + id.Value);
+                    if (response.Result.IsSuccessStatusCode)
                     {
-                        textBoxName.Text = view.SnackName;
-                        textBoxPrice.Text = view.Price.ToString();
-                        ConstituentSnack = view.ConstituentSnack;
+                        var snack = APIAcquirente.GetElement<SnackViewModels>(response);
+                        textBoxName.Text = snack.SnackName;
+                        textBoxPrice.Text = snack.Price.ToString();
+                        ConstituentSnack = snack.ConstituentSnack;
                         LoadData();
+                    }
+
+                    else
+                    {
+                        throw new Exception(APIAcquirente.GetError(response));
                     }
                 }
                 catch (Exception ex)
@@ -82,7 +85,8 @@ namespace MyBistroView
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            var form = Container.Resolve<FormConstituentSnack>();
+
+            var form = new FormConstituentSnack();
             if (form.ShowDialog() == DialogResult.OK)
             {
                 if (form.Model != null)
@@ -101,7 +105,7 @@ namespace MyBistroView
         {
             if (dataGridView.SelectedRows.Count == 1)
             {
-                var form = Container.Resolve<FormConstituentSnack>();
+                var form = new FormConstituentSnack();
                 form.Model = ConstituentSnack[dataGridView.SelectedRows[0].Cells[0].RowIndex];
                 if (form.ShowDialog() == DialogResult.OK)
                 {
@@ -166,9 +170,10 @@ namespace MyBistroView
                         Count = ConstituentSnack[i].Count
                     });
                 }
+                Task<HttpResponseMessage> response;
                 if (id.HasValue)
                 {
-                    service.UpdElement(new SnackBindingModels
+                    response = APIAcquirente.PostRequest("api/Snack/UpdElement", new SnackBindingModels
                     {
                         Id = id.Value,
                         SnackName = textBoxName.Text,
@@ -178,16 +183,25 @@ namespace MyBistroView
                 }
                 else
                 {
-                    service.AddElement(new SnackBindingModels
+                    response = APIAcquirente.PostRequest("api/Snack/AddElement", new SnackBindingModels
                     {
-                        SnackName = textBoxName.Text,
-                        Price = Convert.ToInt32(textBoxPrice.Text),
-                        ConstituentSnack = productComponentBM
-                    });
+                          SnackName = textBoxName.Text,
+                          Price = Convert.ToInt32(textBoxPrice.Text),
+                          ConstituentSnack = productComponentBM
+                      }); 
+
                 }
-                MessageBox.Show("Cохранение прошло уCпешно", "Cообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                DialogResult = DialogResult.OK;
-                Close();
+
+                if (response.Result.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Сохранение прошло успешно", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
+                else
+                {
+                    throw new Exception(APIAcquirente.GetError(response));
+                }
             }
             catch (Exception ex)
             {

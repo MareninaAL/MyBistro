@@ -24,20 +24,9 @@ namespace BistroWeb
     /// </summary>
     public partial class CreateVitaAssassinaWindow : Window
     {
-        [Dependency]
-        public IUnityContainer Container { get; set; }
-
-        private readonly IАcquirenteService serviceA;
-
-        private readonly ISnackService serviceS;
-
-        private readonly IMainService serviceM;
-        public CreateVitaAssassinaWindow(IАcquirenteService serviceA, ISnackService serviceS, IMainService serviceM)
+        public CreateVitaAssassinaWindow()
         {
             InitializeComponent();
-            this.serviceA = serviceA;
-            this.serviceS = serviceS;
-            this.serviceM = serviceM;
             Loaded += CreateVitaAssassinaWindow_Load;
             comboBoxSnack.SelectionChanged += comboBoxSnack_SelectionChanged;
             comboBoxSnack.SelectionChanged += new SelectionChangedEventHandler(comboBoxSnack_SelectionChanged);
@@ -50,9 +39,17 @@ namespace BistroWeb
                 try
                 {
                     int id = Convert.ToInt32(comboBoxSnack.SelectedValue);
-                    SnackViewModels snack = serviceS.GetElement(id);
-                    int count = Convert.ToInt32(textBoxCount.Text);
-                    textBoxSumm.Text = (count * snack.Price).ToString();
+                    var responseP = APIClient.GetRequest("api/Snack/Get/" + id);
+                    if (responseP.Result.IsSuccessStatusCode)
+                    {
+                        SnackViewModels snack = APIClient.GetElement<SnackViewModels>(responseP);
+                        int count = Convert.ToInt32(textBoxCount.Text);
+                        textBoxSumm.Text = (count * (int)snack.Price).ToString();
+                    }
+                    else
+                    {
+                        throw new Exception(APIClient.GetError(responseP));
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -65,23 +62,38 @@ namespace BistroWeb
         {
             try
             {
-                List<АcquirenteViewModels> listA = serviceA.GetList();
-                if (listA != null)
+                var responseC = APIClient.GetRequest("api/Аcquirente/GetList");
+                if (responseC.Result.IsSuccessStatusCode)
                 {
-                    comboBoxAcquirente.DisplayMemberPath = "AcquirenteFIO";
-                    comboBoxAcquirente.SelectedValuePath = "Id";
-                    comboBoxAcquirente.ItemsSource = listA;
-                    comboBoxAcquirente.SelectedItem = null;
+                    List<АcquirenteViewModels> list = APIClient.GetElement<List<АcquirenteViewModels>>(responseC);
+                    if (list != null)
+                    {
+                        comboBoxAcquirente.DisplayMemberPath = "AcquirenteFIO";
+                        comboBoxAcquirente.SelectedValuePath = "Id";
+                        comboBoxAcquirente.ItemsSource = list;
+                        comboBoxAcquirente.SelectedItem = null;
+                    }
                 }
-                List<SnackViewModels> listS = serviceS.GetList();
-                if (listS != null)
+                else
+                {
+                    throw new Exception(APIClient.GetError(responseC));
+                }
+                var responseP = APIClient.GetRequest("api/Snack/GetList");
+                if (responseP.Result.IsSuccessStatusCode)
+                {
+                    List<SnackViewModels> list = APIClient.GetElement<List<SnackViewModels>>(responseP);
+                    if (list != null)
                 {
                     comboBoxSnack.DisplayMemberPath = "SnackName";
                     comboBoxSnack.SelectedValuePath = "Id";
-                    comboBoxSnack.ItemsSource = listS;
+                    comboBoxSnack.ItemsSource = list;
                     comboBoxSnack.SelectedItem = null;
                 }
+            }  else
+                {
+                throw new Exception(APIClient.GetError(responseC));
             }
+        }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -107,16 +119,23 @@ namespace BistroWeb
             }
             try
             {
-                serviceM.CreateVitaAssassina(new VitaAssassinaBindingModels
+                var response = APIClient.PostRequest("api/Main/CreateVitaAssassina", new VitaAssassinaBindingModels
                 {
                     АcquirenteId = Convert.ToInt32(comboBoxAcquirente.SelectedValue),
                     SnackId = Convert.ToInt32(comboBoxSnack.SelectedValue),
                     Count = Convert.ToInt32(textBoxCount.Text),
                     Sum = Convert.ToInt32(textBoxSumm.Text)
                 });
-                MessageBox.Show("Сохранение прошло успешно", "Сообщение", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (response.Result.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Сохранение прошло успешно", "Сообщение", MessageBoxButton.OK, MessageBoxImage.Information);
                 DialogResult = true;
                 Close();
+            }
+                else
+                {
+                    throw new Exception(APIClient.GetError(response));
+                }
             }
             catch (Exception ex)
             {

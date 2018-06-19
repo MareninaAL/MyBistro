@@ -23,20 +23,9 @@ namespace BistroWeb
     /// </summary>
     public partial class PutOnRefrigerator : Window
     {
-        [Unity.Attributes.Dependency]
-        public new IUnityContainer Container { get; set; }
-
-        private readonly IRefrigeratorService serviceS;
-
-        private readonly IConstituentService serviceC;
-
-        private readonly IMainService serviceM;
-        public PutOnRefrigerator(IRefrigeratorService serviceS, IConstituentService serviceC, IMainService serviceM)
+        public PutOnRefrigerator()
         {
             InitializeComponent();
-            this.serviceS = serviceS;
-            this.serviceC = serviceC;
-            this.serviceM = serviceM;
             Loaded += FormPutOnRefrigerator_Load;
         }
 
@@ -44,21 +33,37 @@ namespace BistroWeb
         {
             try
             {
-                List<ConstituentViewModels> listC = serviceC.GetList();
-                if (listC != null)
+                var responseC = APIClient.GetRequest("api/Constituent/GetList");
+                if (responseC.Result.IsSuccessStatusCode)
                 {
-                     comboBoxConstituent.DisplayMemberPath = "ConstituentName";
-                     comboBoxConstituent.SelectedValuePath = "Id";
-                     comboBoxConstituent.ItemsSource = listC;
-                     comboBoxConstituent.SelectedItem = null; 
+                    List<ConstituentViewModels> list = APIClient.GetElement<List<ConstituentViewModels>>(responseC);
+                    if (list != null)
+                    {
+                        comboBoxConstituent.DisplayMemberPath = "ConstituentName";
+                        comboBoxConstituent.SelectedValuePath = "Id";
+                        comboBoxConstituent.ItemsSource = list;
+                        comboBoxConstituent.SelectedItem = null;
+                    }
                 }
-                List<RefrigeratorViewModels> listS = serviceS.GetList();
-                if (listS != null)
+                else
                 {
-                     comboBoxRefrigerator.DisplayMemberPath = "RefrigeratorName";
-                     comboBoxRefrigerator.SelectedValuePath = "Id";
-                     comboBoxRefrigerator.ItemsSource  = listS;
-                     comboBoxRefrigerator.SelectedItem = null; 
+                    throw new Exception(APIClient.GetError(responseC));
+                }
+                var responseS = APIClient.GetRequest("api/Refrigerator/GetList");
+                if (responseS.Result.IsSuccessStatusCode)
+                {
+                    List<RefrigeratorViewModels> list = APIClient.GetElement<List<RefrigeratorViewModels>>(responseS);
+                    if (list != null)
+                    {
+                        comboBoxRefrigerator.DisplayMemberPath = "RefrigeratorName";
+                        comboBoxRefrigerator.SelectedValuePath = "Id";
+                        comboBoxRefrigerator.ItemsSource = list;
+                        comboBoxRefrigerator.SelectedItem = null;
+                    }
+                }
+                else
+                {
+                    throw new Exception(APIClient.GetError(responseS));
                 }
             }
             catch (Exception ex)
@@ -86,15 +91,23 @@ namespace BistroWeb
             }
             try
             {
-                serviceM.PutConstituentOnRefrigerator(new RefrigeratorConstituentBindingModels
+                var response = APIClient.PostRequest("api/Main/PutConstituentOnRefrigerator", new RefrigeratorConstituentBindingModels
                 {
                     ConstituentId = Convert.ToInt32(comboBoxConstituent.SelectedValue),
                     RefrigeratorId = Convert.ToInt32(comboBoxRefrigerator.SelectedValue),
                     Count = Convert.ToInt32(textBoxCount.Text)
-                });  
-                MessageBox.Show("Cохранение прошло уcпешно", "Cообщение", MessageBoxButton.OK );
-                DialogResult = true;
-                Close();
+                });
+                if (response.Result.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Cохранение прошло уcпешно", "Cообщение", MessageBoxButton.OK);
+                    DialogResult = true;
+                    Close();
+                }
+                else
+                {
+                    throw new Exception(APIClient.GetError(response));
+                }
+
             }
             catch (Exception ex)
             {

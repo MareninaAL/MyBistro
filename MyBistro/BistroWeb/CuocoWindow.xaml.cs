@@ -4,6 +4,7 @@ using MyBistroService.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,18 +25,13 @@ namespace BistroWeb
     /// </summary>
     public partial class CuocoWindow : Window
     {
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
 
         public int Id { set { id = value; } }
 
-        private readonly ICuocoService service;
-
         private int? id;
-        public CuocoWindow(ICuocoService service)
+        public CuocoWindow()
         {
             InitializeComponent();
-            this.service = service;
             Loaded += Cuoco_Load;
         }
 
@@ -45,10 +41,15 @@ namespace BistroWeb
             {
                 try
                 {
-                    CuocoViewModels view = service.GetElement(id.Value);
-                    if (view != null)
+                    var response = APIClient.GetRequest("api/Cuoco/Get/" + id.Value);
+                    if (response.Result.IsSuccessStatusCode)
                     {
-                        textBoxCuocoFIO.Text = view.CuocoFIO;
+                        var cuoco = APIClient.GetElement<CuocoViewModels>(response);
+                        textBoxCuocoFIO.Text = cuoco.CuocoFIO;
+                    }
+                    else
+                    {
+                        throw new Exception(APIClient.GetError(response));
                     }
                 }
                 catch (Exception ex)
@@ -67,9 +68,10 @@ namespace BistroWeb
             }
             try
             {
+                Task<HttpResponseMessage> response;
                 if (id.HasValue)
                 {
-                    service.UpdElement(new CuocoBindingModels
+                    response = APIClient.PostRequest("api/Cuoco/UpdElement", new CuocoBindingModels
                     {
                         Id = id.Value,
                         CuocoFIO = textBoxCuocoFIO.Text
@@ -77,14 +79,21 @@ namespace BistroWeb
                 }
                 else
                 {
-                    service.AddElement(new CuocoBindingModels
+                    response = APIClient.PostRequest("api/Cuoco/AddElement", new CuocoBindingModels
                     {
                         CuocoFIO = textBoxCuocoFIO.Text
                     });
                 }
-                MessageBox.Show("Cохранение прошло уCпешно", "Cообщение", MessageBoxButton.OK);
-                DialogResult = true;
-                Close();
+                if (response.Result.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Cохранение прошло уCпешно", "Cообщение", MessageBoxButton.OK);
+                    DialogResult = true;
+                    Close();
+                }
+                else
+                {
+                    throw new Exception(APIClient.GetError(response));
+                }
             }
             catch (Exception ex)
             {

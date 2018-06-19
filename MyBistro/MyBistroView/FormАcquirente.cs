@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,21 +18,16 @@ namespace MyBistroView
 {
     public partial class FormАcquirente : Form
     {
-
-        [Dependency]
-        public new IUnityContainer Container { get; set; }
+        
 
         public int Id { set { id = value; } }
-
-        private readonly IАcquirenteService service;
 
         private int? id;
 
 
-        public FormАcquirente(IАcquirenteService service)
+        public FormАcquirente()
         {
             InitializeComponent();
-            this.service = service;
         }
 
         private void FormАcquirente_Load(object sender, EventArgs e)
@@ -40,10 +36,16 @@ namespace MyBistroView
             {
                 try
                 {
-                    АcquirenteViewModels view = service.GetElement(id.Value);
-                    if (view != null)
+                    var response = APIAcquirente.GetRequest("api/Аcquirente/Get/" + id.Value);
+                    if (response.Result.IsSuccessStatusCode)
                     {
-                        textBoxFIO.Text = view.АcquirenteFIO;
+                        var acquirente = APIAcquirente.GetElement<АcquirenteViewModels>(response);
+                        textBoxFIO.Text = acquirente.АcquirenteFIO;
+                    }
+
+                    else
+                    {
+                        throw new Exception(APIAcquirente.GetError(response));
                     }
                 }
                 catch (Exception ex)
@@ -62,9 +64,10 @@ namespace MyBistroView
             }
             try
             {
+                Task<HttpResponseMessage> response;
                 if (id.HasValue)
                 {
-                    service.UpdElement(new АcquirenteBindingModels
+                    response = APIAcquirente.PostRequest("api/Аcquirente/UpdElement", new АcquirenteBindingModels
                     {
                         Id = id.Value,
                         АcquirenteFIO = textBoxFIO.Text
@@ -72,14 +75,21 @@ namespace MyBistroView
                 }
                 else
                 {
-                    service.AddElement(new АcquirenteBindingModels
+                    response = APIAcquirente.PostRequest("api/Аcquirente/AddElement", new АcquirenteBindingModels
                     {
                         АcquirenteFIO = textBoxFIO.Text
                     });
                 }
-                MessageBox.Show("Cохранение прошло уCпешно", "Cообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                DialogResult = DialogResult.OK;
-                Close();
+                if (response.Result.IsSuccessStatusCode)
+                {
+                    MessageBox.Show("Сохранение прошло успешно", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DialogResult = DialogResult.OK;
+                    Close();
+                }
+                else
+                {
+                    throw new Exception(APIAcquirente.GetError(response));
+                }
             }
             catch (Exception ex)
             {
